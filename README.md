@@ -1,31 +1,59 @@
 # Compact Structured Markup (CSM)
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** 2025-04-10
 
 ## Overview
 
-Compact Structured Markup (CSM) is a lightweight markup language designed to strike a balance between human readability and machine-efficient token usage. Inspired by the need for minimal overhead in AI communications and documentation, CSM provides a clear and structured syntax without the verbosity of traditional markup formats.
+Compact Structured Markup (CSM) is a minimal markup language designed for clear and structured documentation. It is optimized for both human readability and efficient processing by AI agents, with a focus on reducing token usage without compromising structure.
 
 ## Key Features
 
 - **Minimal Syntax:**  
-  CSM uses a handful of reserved tokens and indentation to clearly define structure, reducing token count for efficient parsing.
-  
-- **Human-Readable:**  
-  The format maintains a natural flow and clarity that makes it easy for users to write and understand, even as it incorporates structured data.
+  A small set of reserved tokens and consistent indentation are used to define the document structure without verbose markup.
 
-- **Structured Data Support:**  
-  Easily manage metadata, hierarchical sections, plain text, lists, and code blocks with a few simple rules.
+- **Human Readability:**  
+  The format is designed to be easy to read and write, preserving a natural language flow while still conveying structure.
 
-- **Ease of Parsing:**  
-  Designed with AI and parsing in mind, CSM allows for straightforward conversion into other formats like Markdown or HTML.
+- **Efficient Token Usage:**  
+  The lightweight syntax minimizes extraneous characters, making CSM particularly useful for AI integrations where token costs matter.
 
-## Specification Summary
+- **Extensibility:**  
+  Additional functionality (custom directives, inline annotations, callouts, etc.) can be added via reserved namespaces (`x-`), ensuring backward compatibility with the core spec.
 
-CSM documents are organized line-by-line with reserved tokens indicating their role. Indentation is used to nest elements, and reserved tokens such as `meta:`, `header:`, `text:`, `list:`, and `code:` define the type of content.
+## Specification
 
-Here’s a quick example:
+The full specification for CSM is provided in [SPECIFICATION.md](SPECIFICATION.md). It covers:
+
+- **Design Goals & General Syntax:**  
+  An explanation of the token-minimal approach, with line-oriented structure and indentation-based nesting.
+
+- **Reserved Tokens:**  
+  Detailed definitions for core tokens such as `meta:`, `header:`, `text:`, `list:`, and `code:`.
+
+- **Additional Features:**  
+  Options for inline annotations, custom directives, and extended block types while keeping the markup compact.
+
+- **Parsing & Rendering Guidelines:**  
+  Best practices for building parsers and renderers that convert CSM into human-friendly and machine-friendly formats.
+
+- **Implementation Recommendations:**  
+  Guidance on developing parser libraries, tooling, and testing strategies.
+
+## Getting Started
+
+### Installation
+
+Clone this repository to start using CSM:
+
+```bash
+git clone https://github.com/your-username/compact-structured-markup.git
+cd compact-structured-markup
+```
+
+### Writing CSM Documents
+
+Create a file with a `.csm` extension (e.g., `example.csm`) and follow the documented structure. Here’s a quick example:
 
 ```csm
 meta: title=Project Update, date=2025-04-10, author=Alex
@@ -35,60 +63,35 @@ header: Introduction
     - Define scope
     - Assign tasks
     - Set milestones
-header: Details
-  text: The project has been progressing steadily.
+header: Technical Details
+  text: The project is running smoothly.
   code:
     def greet():
         return "Hello, World!"
 ```
 
-## Getting Started
+### Tools and Converters
 
-### Installation
+- **Parser Libraries:**  
+  Sample implementations in Python and JavaScript are available in the `/parsers` directory to help you parse and render CSM documents.
 
-You can begin experimenting with CSM immediately. Clone this repository:
-
-```bash
-git clone https://github.com/your-username/compact-structured-markup.git
-cd compact-structured-markup
-```
-
-### Usage
-
-1. **Writing CSM Documents:**  
-   Create a new text file (e.g., `example.csm`) using the structure illustrated above.
-
-2. **Parsing Tools:**  
-   Use the provided parsing libraries (or develop your own) to convert CSM documents into your desired output formats. (See the `/parsers` directory for sample implementations.)
-
-3. **Contributing Converters:**  
-   If you have converters or renderers (e.g., to Markdown, HTML, JSON) that work with CSM, feel free to open a pull request.
+- **Conversion Utilities:**  
+  Tools to convert CSM into formats like Markdown or HTML are under development and will be available soon.
 
 ## Contributing
 
-I welcome contributions from developers and enthusiasts interested in minimal markup languages. Please follow these guidelines when contributing:
-
-- **Issues:**  
-  Open an issue first to discuss any significant changes.
-
-- **Pull Requests:**  
-  Keep your pull requests focused and include clear descriptions of your changes.
-
-- **Coding Style:**  
-  Aim for clarity, efficiency, and consistency with the principles of CSM.
+Contributions are welcome! If you have improvements, bug fixes, or additional features to propose:
+- Open an issue to discuss major changes.
+- Submit pull requests that include clear explanations of your modifications.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-I appreciate the inspiration from existing lightweight markup languages such as reStructuredText, AsciiDoc, and YAML. Their balance of readability and structure helped shape the vision for CSM.
+CSM builds on ideas from existing lightweight markup languages such as reStructuredText, AsciiDoc, and YAML. Thank you to those communities for their inspiration and contributions.
 
 ---
 
-Happy documenting!
-
----
-
-Feel free to modify any part of this content to better fit your vision for CSM. Let me know if you need any further changes or additional sections!
+Happy documenting with CSM!
