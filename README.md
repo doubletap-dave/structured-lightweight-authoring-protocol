@@ -1,8 +1,7 @@
 <p align="center">
-  <img src="assets/slap-logo.png" width="150" alt="SLAP logo"/>
+  <img src="assets/slap-logo-light.png" width="350" alt="SLAP logo"/>
 </p>
 
-<h1 align="center">SLAP — Structured Lightweight Authoring Protocol</h1>
 <p align="center"><strong>Finally, a spec that won’t make your parser cry.</strong></p>
 
 <p align="center">
