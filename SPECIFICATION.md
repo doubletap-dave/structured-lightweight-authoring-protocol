@@ -1,7 +1,8 @@
-# Compact Structured Markup (CSM) Specification
+# Structured Lightweight Authoring Protocol (SLAP) Specification
 
-**Version:** 1.1  
-**Date:** 2025-04-10
+**Version:** 1.2  
+**Date:** 2025-04-10  
+**Tagline:** SLAP: Finally, a spec that won’t make your parser cry.
 
 ---
 
@@ -18,13 +19,14 @@
    3. [text:](#text)
    4. [list:](#list)
    5. [code:](#code)
-5. [Additional Features](#additional-features)
+5. [Additional Features and Enhancements](#additional-features-and-enhancements)
    1. [Inline Annotations](#inline-annotations)
-   2. [Custom Directives](#custom-directives)
-   3. [Extended Block Types](#extended-block-types)
-6. [Parsing and Rendering Guidelines](#parsing-and-rendering-guidelines)
-7. [Implementation Guidelines](#implementation-guidelines)
-8. [Example Document](#example-document)
+   2. [Multi-Line Text Blocks](#multi-line-text-blocks)
+   3. [Custom Directives](#custom-directives)
+   4. [Extended Block Types](#extended-block-types)
+6. [Error Handling & Recovery](#error-handling--recovery)
+7. [Parsing and Rendering Guidelines](#parsing-and-rendering-guidelines)
+8. [Implementation Guidelines](#implementation-guidelines)
 9. [Versioning and Extensibility](#versioning-and-extensibility)
 10. [License and Contribution](#license-and-contribution)
 
@@ -32,26 +34,26 @@
 
 ## 1. Introduction
 
-Compact Structured Markup (CSM) is a minimalistic markup language designed for clear, concise documentation. It is optimized to reduce unnecessary tokens while preserving structure and human readability. CSM is intended for projects where efficient AI processing is as important as ease-of-use by human authors.
+Structured Lightweight Authoring Protocol (SLAP) is a minimalistic markup language designed for clear, structured documentation. SLAP is optimized both for human readability and for efficient processing by AI agents, with a strong focus on reducing unnecessary token usage without sacrificing essential structure.
 
 ---
 
 ## 2. Design Goals
 
 - **Minimal Syntax Overhead:**  
-  Use the fewest possible symbols and keywords to define document structure.
+  SLAP employs only the necessary tokens to define structure and data, reducing verbosity and computational token cost.
 
 - **Human Readability:**  
-  Maintain a natural, accessible flow of text without excessive formatting clutter.
+  The protocol is crafted to maintain an accessible, natural language flow that remains easy to author and understand.
 
 - **Efficient Token Usage:**  
-  Reduce extraneous tokens to minimize processing cost for AI agents, enabling faster parsing and lower overhead.
+  By reducing extraneous tokens, SLAP minimizes the payload for both storage and AI processing.
 
 - **Clear Structure and Hierarchy:**  
-  Define a consistent, line-based syntax with well-defined nesting through indentation.
+  A line-oriented approach coupled with uniform indentation ensures that the document's logical structure is immediately clear.
 
 - **Extensibility:**  
-  Allow for future enhancements through reserved namespaces and custom directives while preserving backward compatibility.
+  Future enhancements are facilitated via reserved namespaces and custom directives while keeping backward compatibility intact.
 
 ---
 
@@ -59,79 +61,78 @@ Compact Structured Markup (CSM) is a minimalistic markup language designed for c
 
 ### 3.1 Line-Oriented Structure
 
-- **Single Logical Unit per Line:**  
-  Each line in a CSM document represents a complete logical unit (e.g., metadata, header, text).
-  
-- **Token Placement:**  
-  Reserved tokens, when used, must appear at the beginning of a line (after any indentation that indicates nesting).
+- **One Logical Unit per Line:**  
+  Each line represents a complete unit—whether metadata, headers, or text—typically beginning with a reserved token.
+
+- **Reserved Token Positioning:**  
+  Reserved tokens must start the line, right after any indentation used to indicate nesting.
 
 ### 3.2 Indentation and Nesting
 
 - **Indentation:**  
-  Use spaces (not tabs) for indentation. A uniform indentation (suggested: 2 spaces) defines child elements nested within a parent element.
+  Use spaces only (recommended: 2 spaces per level) for indentation. This defines nested blocks clearly.
   
-- **Nesting Convention:**  
-  A line indented relative to its parent is considered part of that parent’s block (for example, text or list items inside a `header:` section).
+- **Nesting:**  
+  Blocks indented relative to a parent token are considered part of that block (e.g., a list under a header).
 
 ---
 
 ## 4. Reserved Tokens
 
-The following tokens are reserved and provide the structural framework for CSM documents. They are designed to be minimal yet powerful.
+These tokens provide the fundamental structure for SLAP documents:
 
 ### meta:
 
 - **Purpose:**  
-  Provide document-level metadata.
+  Store document-level metadata.
   
 - **Syntax:**  
   ```
   meta: key1=value1, key2=value2, ...
   ```
-  - Use commas to separate key-value pairs.
-  - Place the `meta:` line at the beginning of the document.
+  - Commas separate key-value pairs.
+  - The meta token should appear at the document's start.
 
 ### header:
 
 - **Purpose:**  
-  Define a new document section.
+  Define a new section.
   
 - **Syntax:**  
   ```
   header: Section Title
   ```
-  - Any content following the token on the same line is considered the header title.
-  - Child elements under this header must be indented consistently.
+  - Text following the token is the header title.
+  - Content under a header must be uniformly indented.
 
 ### text:
 
 - **Purpose:**  
-  Introduce a paragraph or continuous block of narrative text.
+  Represent narrative or descriptive text.
   
 - **Syntax:**  
   ```
-  text: This is a paragraph of text that provides description or narrative.
+  text: This is a paragraph of text.
   ```
-  - Multi-line text blocks must retain consistent indentation throughout.
+  - Multi-line text can be written as a single line OR, for long-form paragraphs, use open/close delimiters (see Multi-Line Text Blocks below).
 
 ### list:
 
 - **Purpose:**  
-  Define a list of items.
+  Introduce a list of items.
   
 - **Syntax:**  
   ```
   list:
     - Item 1
     - Item 2
-    - Item 3
   ```
-  - A hyphen (`-`) marks individual list items, placed on lines indented under the `list:` token.
+  - A hyphen (`-`) on indented lines marks each list item.
 
 ### code:
 
 - **Purpose:**  
-  Introduce a code block or preformatted text.
+  Delimit preformatted or code blocks.
   
 - **Syntax:**  
   ```
@@ -139,154 +140,154 @@ The following tokens are reserved and provide the structural framework for CSM d
     def example():
         return "code block"
   ```
-  - All following lines that are indented form part of the code block until the indentation is reduced or another reserved token is encountered.
+  - All indented lines until the next non-indented line or reserved token belong to the code block.
 
 ---
 
-## 5. Additional Features
-
-To further enhance the language while keeping token usage low, the following optional features are defined.
+## 5. Additional Features and Enhancements
 
 ### 5.1 Inline Annotations
 
 - **Purpose:**  
-  Allow brief, inline notes or annotations without breaking the flow of text.
+  Allow in-line annotations without disrupting narrative flow.
   
-- **Syntax:**  
-  Append annotations in parentheses directly after the content.  
-  *Example:*  
+- **Standard Syntax (Parentheses):**  
   ```
-  text: This is a paragraph (note: additional context).
+  text: This is a sentence (note: do not delete the database again).
+  ```
+  
+- **Alternate (Recommended for AI Clarity):**  
+  ```
+  text: This is a sentence [note: do not delete the database again].
   ```
 - **Guideline:**  
-  Use inline annotations sparingly to maintain brevity.
+  Parsers should treat bracketed annotations as structured metadata, ensuring they do not blend with the surrounding text.
 
-### 5.2 Custom Directives
+### 5.2 Multi-Line Text Blocks
 
 - **Purpose:**  
-  Extend the core language for specialized scenarios (e.g., tables, images, citations).
+  Facilitate long-form paragraphs without forced line breaks.
+  
+- **Delimiter-Based Syntax:**  
+  Use custom open/close delimiters to encapsulate multi-line text.
+  
+- **Example:**  
+  ```
+  text:
+    >>>
+    This is a long paragraph spanning multiple lines.
+    It allows for natural narrative flow without awkward line-by-line concatenation.
+    <<<
+  ```
+- **Note:**  
+  The delimiters `>>>` and `<<<` are recommended; implementations may allow alternative custom markers.
+
+### 5.3 Custom Directives
+
+- **Purpose:**  
+  Extend SLAP functionality for specialized content (e.g., tables, images, citations).
   
 - **Syntax:**  
-  Custom directives start with a reserved namespace, using `x-` as a prefix.  
-  *Example:*  
+  Custom directives must use the reserved prefix `x-`.
+  
+  **Example:**  
   ```
   x-table:
     - row: Cell1, Cell2, Cell3
     - row: Data1, Data2, Data3
   ```
 - **Guideline:**  
-  Parsers should ignore unknown custom directives gracefully, ensuring backward compatibility.
+  Unknown custom directives should be ignored gracefully by parsers.
 
-### 5.3 Extended Block Types
+### 5.4 Extended Block Types
 
 - **Inline Key/Value Pairs:**  
-  For compact in-text structured data, allow inline key/value notation using braces.  
-  *Example:*  
+  Embed structured data within text using braces.  
+  **Example:**  
   ```
-  text: User data {id=123, role=admin}
+  text: User info {id=123, role=admin}
   ```
+  
 - **Callouts/Notes:**  
-  Special callouts can be defined with a simple token such as `note:` or `warn:` for low-overhead emphasis.  
-  *Example:*  
+  Reserved tokens like `note:` or `warn:` can highlight critical information.  
+  **Example:**  
   ```
-  note: This is an important note that should be highlighted.
+  note: Critical update required before deployment.
   ```
-  (These tokens follow the same placement and indentation rules as standard tokens.)
 
 ---
 
-## 6. Parsing and Rendering Guidelines
+## 6. Error Handling & Recovery
 
-### 6.1 Parsing
+- **Preservation of Context:**  
+  Upon encountering an error, the parser should:
+  - Capture and log the current block header and the first few lines of the block.
+  - Continue processing the next top-level token block instead of aborting entirely.
+  
+- **Fallback Behavior:**  
+  For unrecoverable errors, output an error summary that includes the context and suggested location of the error.
+  
+- **Robust Logging:**  
+  All errors should be logged with sufficient detail so that developers can identify and correct issues without needing to reprocess the entire document.
+
+---
+
+## 7. Parsing and Rendering Guidelines
 
 - **Line-by-Line Processing:**  
-  A CSM parser processes the document line by line, determining block types based on reserved tokens and indentation levels.
+  Process the document sequentially, with reserved tokens and indentation guiding block boundaries.
   
 - **State Management:**  
-  The parser should maintain state for nested blocks, switching contexts when encountering changes in indentation.
+  Maintain context for nested blocks via consistent tracking of indentation levels.
   
-- **Error Handling:**  
-  Parsers must provide clear error messages if syntax rules (such as inconsistent indentation or unexpected tokens) are violated.
-
-### 6.2 Rendering
-
-- **Human-Friendly Output:**  
-  A renderer converts CSM documents into human-readable formats (e.g., formatted plain text, HTML, Markdown) while preserving the original logical structure.
+- **Rendering:**  
+  Convert SLAP documents into user-friendly formats (e.g., Markdown, HTML) without inserting extra tokens. The renderer must preserve the logical hierarchy defined by SLAP.
   
-- **Token Minimization:**  
-  The rendering process should not add extra tokens; it should faithfully reflect the minimal syntax defined in the document.
+- **Consistency Checks:**  
+  Validate token placement and indentation; issue warnings for inconsistencies to aid in debugging.
 
 ---
 
-## 7. Implementation Guidelines
+## 8. Implementation Guidelines
 
-### 7.1 Development
-
-- **Language Support:**  
-  Develop parser libraries in common languages (such as Python, JavaScript, etc.) to allow widespread usage.
+- **Parser Libraries:**  
+  Develop and maintain libraries in popular languages (Python, JavaScript) to support SLAP.
   
 - **Tooling:**  
-  Provide command-line tools, documentation, and examples to facilitate adoption and testing of CSM.
-
-### 7.2 Testing
-
-- **Unit Tests:**  
-  Create comprehensive test cases covering all token types, nesting scenarios, error conditions, and custom directives.
+  Provide command-line tools and example projects to ease the adoption of SLAP.
+  
+- **Testing:**  
+  Create robust test suites covering all aspects of token recognition, nesting, error recovery, and custom directive handling.
   
 - **Continuous Integration:**  
-  Use CI/CD pipelines to ensure ongoing compatibility and early detection of issues with new format extensions.
-
----
-
-## 8. Example Document
-
-Below is an illustrative CSM document combining core and extended features:
-
-```
-meta: title=Project Update, date=2025-04-10, author=Alex
-header: Introduction
-  text: This document provides a brief update on the project.
-  note: Ensure all team members review the updated scope.
-  list:
-    - Define scope
-    - Assign tasks
-    - Set milestones
-header: Technical Details
-  text: The project is running smoothly; see the code sample below.
-  code:
-    def greet():
-        return "Hello, World!"
-  text: Refer to external libraries {lib=example-lib, version=1.2.3}.
-x-table:
-  - row: Column1, Column2, Column3
-  - row: Data1, Data2, Data3
-```
+  Ensure ongoing compatibility with automated CI pipelines to catch regressions and maintain stability.
 
 ---
 
 ## 9. Versioning and Extensibility
 
-- **Version Declaration:**  
-  Each CSM document should declare its version in the metadata if backward-incompatible changes occur.
+- **Version Declarations:**  
+  Each SLAP document should include a version (as specified in meta) to signal compatibility.
   
-- **Future Tokens:**  
-  New reserved tokens should be defined within a reserved namespace (e.g., `x-`) to avoid conflicts with core functionality.
+- **Future Extensions:**  
+  New tokens should be introduced under reserved namespaces (e.g., `x-`) to ensure backward compatibility.
   
 - **Graceful Degradation:**  
-  Parsers must ignore or provide warnings for unknown tokens to ensure documents remain processable across different versions.
+  Parsers should ignore unknown tokens while processing recognized tokens without failure.
 
 ---
 
 ## 10. License and Contribution
 
 - **License:**  
-  The CSM format is released under the MIT License. See the LICENSE file in the repository.
+  This specification is released under the MIT License. See the LICENSE file for details.
   
 - **Contribution Guidelines:**  
-  Contributions, improvements, and suggestions are welcome. Please follow the issue and pull request guidelines to propose changes.
+  Contributions, bug fixes, and enhancements are welcome. Please follow the standard issue and pull request processes.
+  
+- **Community Feedback:**  
+  Continuous improvements are driven by the SLAP community. Please submit issues or feature requests on the repository.
 
 ---
 
-## Conclusion
-
-The **Compact Structured Markup (CSM)** format is designed to provide a clear, minimal, and extendable approach to structured documentation—optimizing token usage while remaining friendly to human readers. This specification is intended as the baseline for further development and refinement. Contributions and community feedback are encouraged to evolve the standard to meet future needs.
+*Thank you for using SLAP – Structured Lightweight Authoring Protocol. We look forward to your feedback and contributions as we continue to make documentation leaner, clearer, and more robust.*

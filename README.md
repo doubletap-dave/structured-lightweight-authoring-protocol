@@ -1,97 +1,85 @@
-# Compact Structured Markup (CSM)
+# Structured Lightweight Authoring Protocol (SLAP)
 
-**Version:** 1.1  
-**Date:** 2025-04-10
+**Version:** 1.2  
+**Date:** 2025-04-10  
+**Tagline:** SLAP: Finally, a spec that won’t make your parser cry.
 
 ## Overview
 
-Compact Structured Markup (CSM) is a minimal markup language designed for clear and structured documentation. It is optimized for both human readability and efficient processing by AI agents, with a focus on reducing token usage without compromising structure.
+SLAP is a minimalistic markup language designed for clear, structured documentation. It is optimized for human readability and efficient processing by AI agents—delivering low token overhead without sacrificing essential structure. SLAP is our evolution of Compact Structured Markup (CSM) with enhanced inline annotation rules, improved error recovery, and support for multi-line text blocks.
 
 ## Key Features
 
-- **Minimal Syntax:**  
-  A small set of reserved tokens and consistent indentation are used to define the document structure without verbose markup.
+- **Minimal Syntax & Clear Structure:**  
+  Uses only essential reserved tokens and consistent indentation to define document structure in a line-oriented manner.
 
-- **Human Readability:**  
-  The format is designed to be easy to read and write, preserving a natural language flow while still conveying structure.
+- **Optimized for Token Efficiency:**  
+  Designed to reduce unnecessary tokens, making it ideal for integration with AI agents and large-scale documentation.
 
-- **Efficient Token Usage:**  
-  The lightweight syntax minimizes extraneous characters, making CSM particularly useful for AI integrations where token costs matter.
+- **Enhanced Inline Annotations:**  
+  Supports in-line notes using both parentheses and brackets—with brackets recommended to avoid ambiguity in AI processing.
+  - *Example:*  
+    ```
+    text: This is a sentence [note: do not delete the database again].
+    ```
 
-- **Extensibility:**  
-  Additional functionality (custom directives, inline annotations, callouts, etc.) can be added via reserved namespaces (`x-`), ensuring backward compatibility with the core spec.
+- **Multi-Line Text Blocks:**  
+  Support for open/close delimiters (e.g., `>>>` and `<<<`) allows long-form paragraphs to be written naturally without forced line breaks.
+  - *Example:*
+    ```
+    text:
+      >>>
+      This is a long paragraph spanning multiple lines.
+      It allows for more natural narrative flow.
+      <<<
+    ```
+
+- **Robust Error Handling & Recovery:**  
+  Guidelines ensure that parsing errors are logged with context and processing continues with the next logical block, improving resilience for complex documents.
+
+- **Extensible & Customizable:**  
+  Built-in support for custom directives (using the `x-` prefix) and extended block types ensures that SLAP can evolve to meet future needs while preserving backward compatibility.
 
 ## Specification
 
-The full specification for CSM is provided in [SPECIFICATION.md](SPECIFICATION.md). It covers:
+The full SLAP specification is detailed in [SPECIFICATION.md](SPECIFICATION.md). It covers:
 
-- **Design Goals & General Syntax:**  
-  An explanation of the token-minimal approach, with line-oriented structure and indentation-based nesting.
-
-- **Reserved Tokens:**  
-  Detailed definitions for core tokens such as `meta:`, `header:`, `text:`, `list:`, and `code:`.
-
-- **Additional Features:**  
-  Options for inline annotations, custom directives, and extended block types while keeping the markup compact.
-
-- **Parsing & Rendering Guidelines:**  
-  Best practices for building parsers and renderers that convert CSM into human-friendly and machine-friendly formats.
-
-- **Implementation Recommendations:**  
-  Guidance on developing parser libraries, tooling, and testing strategies.
+- Design goals and general syntax guidelines.
+- Reserved tokens for core document structure (meta, header, text, list, code).
+- Enhancements including inline annotations, multi-line text blocks, custom directives, and extended block types.
+- In-depth error handling and recovery, along with parsing and rendering best practices.
+- Implementation guidelines with recommendations for parser libraries, tooling, and testing.
 
 ## Getting Started
 
 ### Installation
 
-Clone this repository to start using CSM:
+Clone this repository to explore the SLAP specification:
 
 ```bash
-git clone https://github.com/your-username/compact-structured-markup.git
-cd compact-structured-markup
+git clone https://github.com/your-username/structured-lightweight-authoring-protocol.git
+cd structured-lightweight-authoring-protocol
 ```
 
-### Writing CSM Documents
+### Usage
 
-Create a file with a `.csm` extension (e.g., `example.csm`) and follow the documented structure. Here’s a quick example:
-
-```csm
-meta: title=Project Update, date=2025-04-10, author=Alex
-header: Introduction
-  text: This document provides a brief update on the project.
-  list:
-    - Define scope
-    - Assign tasks
-    - Set milestones
-header: Technical Details
-  text: The project is running smoothly.
-  code:
-    def greet():
-        return "Hello, World!"
-```
-
-### Tools and Converters
-
-- **Parser Libraries:**  
-  Sample implementations in Python and JavaScript are available in the `/parsers` directory to help you parse and render CSM documents.
-
-- **Conversion Utilities:**  
-  Tools to convert CSM into formats like Markdown or HTML are under development and will be available soon.
+1. **Writing SLAP Documents:**  
+   Create a file with a `.slap` extension (e.g., `example.slap`) and follow the guidelines in the specification.
+2. **Parsing Tools:**  
+   Sample parser libraries and CLI tools in various languages (e.g., Python, JavaScript) are provided in the `/parsers` directory.
+3. **Contributing and Extensions:**  
+   Contributions to enhance SLAP and to build tooling around it are welcome. Please see the contribution guidelines for further details.
 
 ## Contributing
 
-Contributions are welcome! If you have improvements, bug fixes, or additional features to propose:
-- Open an issue to discuss major changes.
-- Submit pull requests that include clear explanations of your modifications.
+- **Issues:** Open issues for any features, bug reports, or enhancement suggestions.
+- **Pull Requests:** Submit PRs with clear, focused changes along with a description of your modifications.
+- **Community Feedback:** Engage with the community to help evolve SLAP for broader usage.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-CSM builds on ideas from existing lightweight markup languages such as reStructuredText, AsciiDoc, and YAML. Thank you to those communities for their inspiration and contributions.
+This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-Happy documenting with CSM!
+Happy documenting with SLAP!
