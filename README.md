@@ -78,7 +78,7 @@ cd structured-lightweight-authoring-protocol
 
 ## License
 
-This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+📜 This project is released under the BSD 3-Clause. See the [LICENSE](LICENSE) file for details.
 
 ---
 
