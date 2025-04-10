@@ -1,85 +1,101 @@
-# Structured Lightweight Authoring Protocol (SLAP)
+<p align="center">
+  <img src="assets/slap-logo.png" width="150" alt="SLAP logo"/>
+</p>
 
-**Version:** 1.2  
-**Date:** 2025-04-10  
-**Tagline:** SLAP: Finally, a spec that won’t make your parser cry.
+<h1 align="center">SLAP — Structured Lightweight Authoring Protocol</h1>
+<p align="center"><strong>Finally, a spec that won’t make your parser cry.</strong></p>
 
-## Overview
+<p align="center">
+  <em>Version 1.2 — 2025-04-10</em>
+</p>
 
-SLAP is a minimalistic markup language designed for clear, structured documentation. It is optimized for human readability and efficient processing by AI agents—delivering low token overhead without sacrificing essential structure. SLAP is our evolution of Compact Structured Markup (CSM) with enhanced inline annotation rules, improved error recovery, and support for multi-line text blocks.
+---
 
-## Key Features
+## 🚀 Overview
 
-- **Minimal Syntax & Clear Structure:**  
-  Uses only essential reserved tokens and consistent indentation to define document structure in a line-oriented manner.
+**SLAP** is a minimalist markup language engineered for *clarity, structure, and sanity*. It was born from the ashes of Compact Structured Markup (CSM) and redesigned with fewer tokens, stronger annotations, and cleaner multi-line formatting. Whether you’re feeding it to an AI or writing it by hand, SLAP is designed to be lean, readable, and *parser-friendly*.
 
-- **Optimized for Token Efficiency:**  
-  Designed to reduce unnecessary tokens, making it ideal for integration with AI agents and large-scale documentation.
+## ✨ Key Features
 
-- **Enhanced Inline Annotations:**  
-  Supports in-line notes using both parentheses and brackets—with brackets recommended to avoid ambiguity in AI processing.
-  - *Example:*  
-    ```
-    text: This is a sentence [note: do not delete the database again].
-    ```
+- **📐 Minimal Syntax, Maximum Structure**  
+  Reserved tokens and indentation define everything. No clutter. No chaos. Just structure.
 
-- **Multi-Line Text Blocks:**  
-  Support for open/close delimiters (e.g., `>>>` and `<<<`) allows long-form paragraphs to be written naturally without forced line breaks.
-  - *Example:*
-    ```
-    text:
-      >>>
-      This is a long paragraph spanning multiple lines.
-      It allows for more natural narrative flow.
-      <<<
-    ```
+- **⚡ Token-Efficient by Design**  
+  Keep it lightweight for large-scale AI processing or compact documentation pipelines.
 
-- **Robust Error Handling & Recovery:**  
-  Guidelines ensure that parsing errors are logged with context and processing continues with the next logical block, improving resilience for complex documents.
+- **🧠 Smarter Inline Annotations**  
+  Use `[note: …]` or `(note: …)` for seamless inline metadata.  
+  ```slap
+  text: This is a sentence [note: do not delete the database again].
+  ```
 
-- **Extensible & Customizable:**  
-  Built-in support for custom directives (using the `x-` prefix) and extended block types ensures that SLAP can evolve to meet future needs while preserving backward compatibility.
+- **📖 Multi-Line Text Blocks (finally)**  
+  Natural paragraph flow using custom delimiters:  
+  ```slap
+  text:
+    >>>
+    This is a long paragraph spanning multiple lines.
+    It allows for more natural narrative flow.
+    <<<
+  ```
 
-## Specification
+- **🛡️ Robust Error Recovery**  
+  Syntax errors? No problem. SLAP parsers log the issue and carry on like champs.
 
-The full SLAP specification is detailed in [SPECIFICATION.md](SPECIFICATION.md). It covers:
+- **🧩 Extensible by Default**  
+  Want to add tables, citations, or weird alien formats? Use custom directives like `x-table:` and SLAP won’t even flinch.
 
-- Design goals and general syntax guidelines.
-- Reserved tokens for core document structure (meta, header, text, list, code).
-- Enhancements including inline annotations, multi-line text blocks, custom directives, and extended block types.
-- In-depth error handling and recovery, along with parsing and rendering best practices.
-- Implementation guidelines with recommendations for parser libraries, tooling, and testing.
+---
 
-## Getting Started
+## 📚 Specification
+
+The full SLAP specification lives in [`SPECIFICATION.md`](SPECIFICATION.md), including:
+
+- Design philosophy & syntax rules
+- Core token definitions (`meta`, `header`, `text`, `list`, `code`)
+- Enhancements: inline annotations, block delimiters, custom extensions
+- Parsing strategy, rendering formats, and resilience requirements
+- Implementation guidance (including parser tooling, CLI options, and test strategies)
+
+---
+
+## 🧰 Getting Started
 
 ### Installation
-
-Clone this repository to explore the SLAP specification:
 
 ```bash
 git clone https://github.com/your-username/structured-lightweight-authoring-protocol.git
 cd structured-lightweight-authoring-protocol
 ```
 
-### Usage
+### Basic Usage
 
-1. **Writing SLAP Documents:**  
-   Create a file with a `.slap` extension (e.g., `example.slap`) and follow the guidelines in the specification.
-2. **Parsing Tools:**  
-   Sample parser libraries and CLI tools in various languages (e.g., Python, JavaScript) are provided in the `/parsers` directory.
-3. **Contributing and Extensions:**  
-   Contributions to enhance SLAP and to build tooling around it are welcome. Please see the contribution guidelines for further details.
+1. **Write SLAP Docs:**  
+   Create `.slap` files and structure them using the spec.
 
-## Contributing
+2. **Parse & Render:**  
+   Use the parser tools in `/parsers` (Python, JavaScript, etc.) to process `.slap` files into readable or rendered output.
 
-- **Issues:** Open issues for any features, bug reports, or enhancement suggestions.
-- **Pull Requests:** Submit PRs with clear, focused changes along with a description of your modifications.
-- **Community Feedback:** Engage with the community to help evolve SLAP for broader usage.
-
-## License
-
-📜 This project is released under the BSD 3-Clause. See the [LICENSE](LICENSE) file for details.
+3. **Extend It:**  
+   Build custom directives. Submit improvements. Get a SLAP tattoo. Your journey begins here.
 
 ---
 
-Happy documenting with SLAP!
+## 🙌 Contributing
+
+We welcome your ideas, bugs, pull requests, memes, and markdown regrets:
+
+- Open an [issue](https://github.com/your-username/structured-lightweight-authoring-protocol/issues)
+- Submit a PR with focused, atomic changes
+- Add to `/parsers` or enhance the spec with backward-compatible updates
+
+---
+
+## 📄 License
+
+This project is licensed under the BSD 3-Clause.  
+See [`LICENSE`](LICENSE) for the full legal spell scroll.
+
+---
+
+> SLAP: For people who think Markdown is too soft.
