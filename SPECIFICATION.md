@@ -223,6 +223,60 @@ The core primitives of Nomenic documents:
 - **CI Friendly:**  
   Make linting and transformation tools integrable with GitHub Actions.
 
+### 📁 Suggested Project Structure
+
+```
+nomenic/
+├── spec/                        # Formal specifications
+│   ├── NOMENIC-CORE.md          # Core spec (this file)
+│   ├── TOKEN-SCHEMA.nmc         # Token definition registry
+│   ├── meta-parser.md           # How to parse with dynamic schemas
+│   └── extensions.md            # Optional extensions (e.g., quote, diagram)
+│
+├── cli/                         # The CLI toolchain
+│   ├── index.ts (or main.py)    # Entry point
+│   └── commands/                # Lint, render, parse, etc.
+│       ├── lint.ts
+│       ├── render.ts
+│       ├── parse.ts
+│
+├── playground/                  # Web-based editor + preview
+│   └── web-renderer/            # HTML + CSS + JS playground
+│
+├── docs/                        # Human-facing documentation
+│   ├── README.md                # Intro to the ecosystem
+│   ├── quickstart.md            # TL;DR usage
+│   ├── developer-guide.md       # Build your own parser, renderer, etc.
+│   └── migration-guide.md       # From Markdown to Nomenic
+│
+├── .github/                     # GitHub Actions and config
+│   └── workflows/
+│       └── render.yml           # Render .nmc → HTML on push
+│
+├── site/                        # Static site generator input
+│   └── nomenic.com              # Landing page content
+│
+├── examples/                    # Sample `.nmc` files
+│   └── overview.nmc
+│   └── nested-logic.nmc
+│
+└── test/                        # Test cases and schemas
+    ├── syntax-errors.nmc
+    ├── expected-output.json
+    └── render-tests/
+```
+**  
+  Python or JS recommended. Formal grammar optional.
+
+- **Command Line Tools:**  
+  Include `nomenic lint`, `nomenic render`, `nomenic parse`.
+
+- **Testing:**  
+  Validate on malformed input, deep nesting, edge cases.
+
+- **CI Friendly:**  
+  Make linting and transformation tools integrable with GitHub Actions.
+
 ---
 
 ## 9. Versioning and Extensibility
