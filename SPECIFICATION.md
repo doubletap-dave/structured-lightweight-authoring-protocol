@@ -1,8 +1,10 @@
-# Nomenic Specification
+# Nomenic Core Specification
 
 **Version:** 1.0.0  
 **Date:** 2025-04-14  
 **Tagline:** Nomenic: Structure Everything.
+
+> **File Extension:** Nomenic Core files use the `.nmc` extension.
 
 ---
 
