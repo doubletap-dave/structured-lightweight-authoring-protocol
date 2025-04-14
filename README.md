@@ -1,7 +1,4 @@
-<p align="center">
-  <img src="assets/slap-logo-light.png" width="350" alt="SLAP logo"/>
-</p>
-
+# Nomenic Core
 <p align="center"><strong>Finally, a spec that won’t make your parser cry.</strong></p>
 
 <p align="center">
