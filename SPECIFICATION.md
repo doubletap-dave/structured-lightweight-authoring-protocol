@@ -234,11 +234,11 @@ nomenic/
 │   └── extensions.md            # Optional extensions (e.g., quote, diagram)
 │
 ├── cli/                         # The CLI toolchain
-│   ├── index.ts (or main.py)    # Entry point
+│   ├── main.py    # Entry point
 │   └── commands/                # Lint, render, parse, etc.
-│       ├── lint.ts
-│       ├── render.ts
-│       ├── parse.ts
+│       ├── lint.py
+│       ├── render.py
+│       ├── parse.py
 │
 ├── playground/                  # Web-based editor + preview
 │   └── web-renderer/            # HTML + CSS + JS playground
