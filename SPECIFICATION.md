@@ -83,6 +83,16 @@
 
 The core primitives of Nomenic documents:
 
+### table:
+
+- **Purpose:** Define structured tabular data.
+- **Syntax:**
+  ```
+  table:
+    - row: Header1, Header2
+    - row: Value1, Value2
+  ```
+  - Tables are rendered as `<table>`, with each `row:` treated as a `<tr>`.
 ### meta:
 
 - **Purpose:** Top-level document metadata.
@@ -155,10 +165,27 @@ The core primitives of Nomenic documents:
 
 ### 5.3 Custom Directives
 
-- **Purpose:** Extend functionality.
+- **Purpose:** Extend functionality through user-defined tokens.
+
 - **Syntax:**
   ```
-  x-table:
+  x-quote:
+    >>>
+    This is a custom directive block.
+    It renders according to its definition.
+    <<<
+  ```
+
+- **Behavior:**
+  Parsers encountering a token prefixed with `x-` must:
+  1. Treat it as a valid block token.
+  2. Attempt to resolve its behavior using a Token Definition Schema (see `TOKEN-SCHEMA.nmc`).
+  3. If no rule exists, fall back to generic rendering (e.g., as a `<div class="x-quote">` with preformatted content).
+
+- **Goal:** Allow new block types without changing the parser core. Useful for experimentation, plugins, and community-defined extensions.** Extend functionality.
+- **Syntax:**
+  ```
+  table:
     - row: Cell1, Cell2
     - row: Value1, Value2
   ```
@@ -196,6 +223,33 @@ The core primitives of Nomenic documents:
 ## 7. Parsing and Rendering Guidelines
 
 - **Sequential Processing:**  
+  Read top to bottom. One line at a time.
+
+- **Respect Nesting:**  
+  Use indentation to determine block hierarchy.
+
+- **Flexible Output Targets:**  
+  Render to HTML, Markdown fallback, JSON, or tokens.
+
+- **Validation:**  
+  Warn for incorrect tokens, indentation, or block misuse.
+
+### 🔤 Short Token Aliases
+
+For convenience, parsers may support the following short forms:
+
+| Long Token | Short Alias |
+|------------|-------------|
+| `meta:`    | `m:`        |
+| `header:`  | `h:`        |
+| `text:`    | `t:`        |
+| `list:`    | `l:`        |
+| `code:`    | `c:`        |
+| `table:`   | `tb:`       |
+| `note:`    | `n:`        |
+| `warn:`    | `w:`        |
+
+These are optional but encouraged for faster authoring. The spec will continue to use full tokens for clarity.  
   Read top to bottom. One line at a time.
 
 - **Respect Nesting:**  
