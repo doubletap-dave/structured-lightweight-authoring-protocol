@@ -1,60 +1,64 @@
 # Nomenic Core
-<p align="center"><strong>Finally, a spec that won’t make your parser cry.</strong></p>
+<p align="center"><strong>The structured format that won’t make your parser cry.</strong></p>
 
 <p align="center">
-  <em>Version 1.2 — 2025-04-10</em>
+  <em>Version 1.0.0 — 2025-04-14</em>
 </p>
+
+---
 
 ## 🚀 Overview
 
-**SLAP** is a minimalist markup language designed for clean, structured documentation. It keeps your syntax tight, your tokens lean, and your indentation holy. SLAP is made for humans and machines who like their docs fast, readable, and just a little judgmental.
+**Nomenic Core** is a structured authoring format engineered for clarity, AI efficiency, and machine-readable precision. It’s the antidote to bloated markdown, brittle YAML, and human-hostile XML. Nomenic keeps your docs clean, your tokens lean, and your structure fully intact.
 
-Originally evolved from Compact Structured Markup (CSM), SLAP is smarter, snappier, and intentionally built to thrive in AI-integrated environments.
+Born from the frustrations of maintaining both human-readable and machine-consumable documentation, Nomenic is built to unify writing, parsing, and reasoning under one extensible format.
 
 ---
 
 ## ✨ Key Features
 
-- **Minimal Syntax, Max Clarity**\
-  Reserved tokens, clean indentation, and zero tolerance for clutter.
+- **Minimal Syntax, Max Clarity**  
+  Reserved tokens, indentation-based hierarchy, and zero ambiguity.
 
-- **Token-Efficient by Design**\
-  Built with language models and compact processing in mind.
+- **Token-Efficient by Design**  
+  Friendly to LLMs and structured parsers. Compact where it counts.
 
-- **Smarter Inline Annotations**\
-  Keep your notes structured and unobtrusive:
+- **Smarter Inline Annotations**  
+  Embedded notes that don’t pollute the prose:
 
-  ```slap
+  ```nmc
   text: This is inline [note: keep it clean].
   ```
 
-- **Multi-Line Text Blocks (finally)**\
-  Write real paragraphs like a grown-up:
+- **Multi-Line Paragraph Blocks**  
+  Write real text. Get real formatting.
 
-  ```slap
+  ```nmc
   text:
     >>>
-    This is a beautiful, flowing paragraph
-    with no line-break guilt.
+    This is a full paragraph
+    spanning multiple lines
+    with no markdown shame.
     <<<
   ```
 
-- **Custom Directives**\
-  Add tables, weird blocks, or custom magic using `x-` directives.
+- **Custom Directives**  
+  Need a table? A callout? A magical block? Use `x-` and go wild.
 
-- **Error Tolerance Built-In**\
-  SLAP parsers log, recover, and keep moving. No more crashing on syntax sadness.
+- **Built for Error Recovery**  
+  Parsers log and recover. The spec doesn’t assume you’re perfect.
 
 ---
 
 ## 📚 Full Specification
 
-You want the deep cuts? Head over to [`SPECIFICATION.md`](SPECIFICATION.md) for:
+If you like your structure documented, you'll love [`SPECIFICATION.md`](SPECIFICATION.md).
 
-- Core tokens (`meta`, `header`, `text`, `list`, `code`)
-- Annotations, block delimiters, and custom directive usage
-- Error handling, rendering rules, and parser structure
-- Implementation advice for building SLAP-aware tools
+Covers:
+- Core tokens like `meta`, `header`, `text`, `list`, and `code`
+- Annotations, callouts, multiline formatting, and extensions
+- Parser expectations, rendering pipelines, and CLI conventions
+- Implementation notes and error-handling policies
 
 ---
 
@@ -63,39 +67,40 @@ You want the deep cuts? Head over to [`SPECIFICATION.md`](SPECIFICATION.md) for:
 ### Install
 
 ```bash
-git clone https://github.com/your-username/structured-lightweight-authoring-protocol.git
-cd structured-lightweight-authoring-protocol
+git clone https://github.com/your-org/nomenic-core.git
+cd nomenic-core
 ```
 
 ### Usage
 
-1. **Write in SLAP**\
-   Create a file like `example.slap` and structure it using the core syntax.
+1. **Write with Structure**  
+   Create a file like `example.nmc` and write using the Nomenic format.
 
-2. **Parse It**\
-   Use the sample parsers in `/parsers` (Python, JS, etc.) to validate and render.
+2. **Parse and Render**  
+   Use the starter parsers in `/parsers` to validate and transform.
 
-   TODO TODO TODO TODO TODO TODO
+3. **Extend**  
+   Add your own directives using `x-` prefixed tokens. It’s your playground.
 
-3. **Extend It**\
-   Add your own `x-whatever:` blocks. SLAP won’t complain.
+> Full CLI support coming soon.
 
 ---
 
 ## 🤝 Contributing
 
-- Open an issue if something feels wrong.
-- Fork and PR if you have something better.
-- Use SLAP in the wild and share what you build.
+We welcome contributions from structured beings of all kinds:
+- File an issue if something breaks your brain
+- Fork it and fix it if you're feeling brave
+- Add docs, specs, or demos if you're feeling inspired
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for actual rules and etiquette.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to participate responsibly.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the BSD 3-Clause. See [`LICENSE`](LICENSE) for the legal boilerplate.
+BSD 3-Clause. Clean, permissive, and boring enough for your boss to approve it. See [`LICENSE`](LICENSE).
 
 ---
 
-> SLAP: Because Markdown's been getting away with too much for too long.
+> Nomenic: Because we deserve better than markdown spaghetti.
