@@ -2,7 +2,7 @@
 fileWeight: high
 linkedPatterns: []
 confidenceRating: 0.95
-triggeredByTick: tick-0000000002
+triggeredByTick: tick-000000000C
 ---
 
 header: System Patterns Registry

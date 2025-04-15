@@ -3,7 +3,7 @@ fileWeight: high
 linkedPatterns:
   - nomenic-core-syntax
 confidenceRating: 0.9
-triggeredByTick: tick-0000000002
+triggeredByTick: tick-000000000C
 ---
 
 header: Technical Context: Nomenic Core v1.0.0

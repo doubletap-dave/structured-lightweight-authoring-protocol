@@ -1,24 +1,26 @@
 ---
 fileWeight: medium
 linkedPatterns: []
-confidenceRating: 0.95
-triggeredByTick: tick-000000000B
+confidenceRating: 0.97
+triggeredByTick: tick-000000000C
 ---
 
 header: Active Context
-  text: All lexer tests fixed and passing. Key issues resolved included proper regex escaping, optional whitespace after colons, correct handling of indented block tokens, proper code block content capture, and inline style token processing. Parser remains a stub.
+  text: All Bandit warnings suppressed (B101, B105), ruff clean, Memory Bank fully synced. All lexer tests passing. Parser remains a stub.
   status: Moving to Phase 2 (Parser Implementation)
-  focus: Moving on to Parser logic implementation.
+  focus: Parser implementation next; all linting and security checks clean.
 
 # --- Previous Session Prep entries can be archived or removed as needed ---
 
-header: Session Prep (Generated 2025-04-14)
-  summary: "Fixed all 12 failing lexer tests. Corrected regex escape sequences, block token recognition with optional whitespace, indented block token handling, code block content processing, and inline style parsing."
+header: Session Prep (Generated 2025-04-15)
+  summary: "Bandit fully suppressed (B101, B105), ruff E501 clean, Memory Bank synced. Ready for parser implementation."
   sourceFilesUpdated:
+    - .pre-commit-config.yaml
     - src/nomenic/lexer.py
     - _memory_bank/activeContext.md
     - _memory_bank/progress.md
-  nextSessionCue: "Proceed with Phase 2, Step 2.4: Implement Parser logic (AST generation) in `src/nomenic/parser.py` and AST node classes in `src/nomenic/ast.py`."
+    - _memory_bank/temporalIndex.md
+  nextSessionCue: "Implement parser logic (AST generation) in src/nomenic/parser.py and ast.py."
 
 header: Session Prep (Generated from previous debug session)
   summary: "Testing infra setup (pytest, coverage, pre-commit: black, isort, ruff, bandit pass). Lexer refactored, SECTION token added. Ruff complexity ignored, Mypy hook disabled. Bandit B101 suppressed. 12 Pytest failures remain for lexer tokenization/errors."

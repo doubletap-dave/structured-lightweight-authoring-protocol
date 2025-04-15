@@ -2,7 +2,7 @@
 fileWeight: high
 linkedPatterns: []
 confidenceRating: 0.8
-triggeredByTick: tick-0000000003
+triggeredByTick: tick-000000000C
 ---
 
 header: Project Brief: Nomenic Core
