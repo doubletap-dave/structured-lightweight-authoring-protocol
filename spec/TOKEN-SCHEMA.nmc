@@ -1,0 +1,135 @@
+meta:
+  title: Nomenic Core Token Schema
+  version: 1.0.0
+  status: draft
+
+header: Core Block Tokens
+  text: These tokens define the primary structural elements of a Nomenic Core document.
+
+list:
+  - token: meta
+    type: block
+    scope: document
+    description: Defines document-level metadata as key=value pairs. Must appear at the start, indentation level 0.
+    aliases: m:
+  - token: header
+    type: block
+    scope: section
+    description: Defines a section heading. Can be nested using indentation.
+    aliases: h:
+  - token: text
+    type: block
+    scope: content
+    description: Defines a paragraph or multi-line text block. Supports `>>>`/`<<<` delimiters for explicit multi-line content.
+    aliases: t:
+  - token: list
+    type: block
+    scope: content
+    description: Defines an unordered list container. List items are denoted by `- ` at the next indentation level.
+    aliases: l:
+  - token: code
+    type: block
+    scope: content
+    description: Defines a preformatted code block. Content maintains whitespace.
+    aliases: c:
+  - token: table
+    type: block
+    scope: content
+    description: Defines a container for tabular data. Requires `row:` sub-elements.
+    aliases: tbl:
+  - token: def-list
+    type: block
+    scope: content
+    description: Defines a definition list container. Contains `dt:` (term) and `dd:` (description) elements.
+    aliases: dl
+  - token: def-item
+    type: block
+    scope: definition item
+    description: Defines a term within a `dl:` block.
+    aliases: dt
+  - token: def-item
+    type: block
+    scope: definition item
+    description: Defines the description/data for a preceding `dt:` within a `dl:` block.
+    aliases: dd
+  - token: blockquote
+    type: block
+    scope: content
+    description: Defines a block quotation. Typically contains nested `text:` blocks.
+    aliases: bq:
+  - token: figure
+    type: block
+    scope: content
+    description: Represents a figure, usually an image, with an optional caption. Expects nested `src:` and optionally `caption:`.
+    aliases: fig:
+  - token: src
+    type: property
+    scope: figure
+    description: Specifies the source URL or path for a `figure:`.
+    aliases: 
+  - token: caption
+    type: property
+    scope: figure
+    description: Provides a caption (usually as nested `text:`) for a `figure:`.
+    aliases: 
+
+header: Inline Elements & Modifiers
+  text: These elements modify or annotate content within lines or specific blocks.
+
+list:
+  - token: '-'
+    type: modifier
+    scope: list item
+    description: Denotes an item within a `list:` block. Must be followed by a space.
+  - token: '>>>' / '<<<'
+    type: delimiter
+    scope: text block
+    description: Explicitly start/end a multi-line text block, preserving internal line breaks.
+  - token: '(...)'
+    type: inline annotation
+    scope: any line
+    description: Parenthesis-based inline annotation.
+  - token: '[...]'
+    type: inline annotation
+    scope: any line
+    description: Bracket-based inline annotation.
+  - token: '{...}'
+    type: inline key-value
+    scope: any line
+    description: Inline key-value pairs, typically for attributes or short metadata.
+  - token: 'note:' / 'warn:' / 'tip:'
+    type: callout
+    scope: block
+    description: Prefixes a block (like `text:`) to create a styled callout.
+  - token: 'x-*'
+    type: custom directive
+    scope: block
+    description: Placeholder for user-defined extensions. Parsers should handle these based on configuration (ignore, pass-through, process).
+  - token: '1.' / 'a.' / 'A.' / 'i.' / 'I.' # etc.
+    type: modifier
+    scope: list item marker
+    description: Denotes an ordered list item within a `list:` block. Specific sequences (1, 2, 3... a, b, c...) should be tracked by parsers/renderers.
+  - token: '#'
+    type: comment marker
+    scope: line start
+    description: Indicates a comment line. Parsers should ignore the entire line.
+  - token: '\'
+    type: escape character
+    scope: inline
+    description: Escapes the immediate next character, allowing literal representation (e.g., \@, \#, \\).
+  - token: '@b()' / '@bold()'
+    type: style token
+    scope: inline
+    description: Applies bold/strong formatting to the enclosed text.
+  - token: '@i()' / '@italic()'
+    type: style token
+    scope: inline
+    description: Applies italic/emphasis formatting to the enclosed text.
+  - token: '@c()' / '@code()'
+    type: style token
+    scope: inline
+    description: Formats the enclosed text as inline code.
+  - token: '@l(text, url, title?)' / '@link(...)'
+    type: style token
+    scope: inline
+    description: Creates a hyperlink. Requires text and URL; title is optional. 
