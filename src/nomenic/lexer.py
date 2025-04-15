@@ -351,11 +351,10 @@ class Lexer:
 
                     # If there's any content on the same line (and it's not handled by a
                     # special case above)
-                    if (
-                        token_type != TokenType.TEXT
-                        and token_type != TokenType.CODE
-                        and self.col_idx < len(line)
-                    ):
+                    if token_type not in (
+                        TokenType.TEXT,
+                        TokenType.CODE,
+                    ) and self.col_idx < len(line):
                         yield Token(
                             type=TokenType.TEXT,
                             value=line[self.col_idx :],
