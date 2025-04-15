@@ -1,8 +1,8 @@
 ---
 fileWeight: medium
 linkedPatterns: []
-confidenceRating: 0.90
-triggeredByTick: tick-0000000009
+confidenceRating: 0.92
+triggeredByTick: tick-000000000A
 ---
 
 header: Project Progress
@@ -10,17 +10,15 @@ header: Project Progress
 
 header: Milestones
   list:
-    - [X] Phase 1: Specification Solidification (Completed 2025-04-14)
-    - [ ] Phase 2: Core Parser Implementation
-      - [X] 2.1: Confirm Python for reference implementation
-      - [X] 2.2: Set up parser module structure in `src/`
-      - [X] 2.3: Implement Lexer/Tokenizer based on `TOKEN-SCHEMA.nmc`
-      - [ ] 2.4: Implement Parser logic (e.g., AST generation)
-      - [ ] 2.5: Implement basic fault tolerance and error reporting
-    - [ ] Phase 3: Testing & Validation
+    - [X] Phase 1: Specification Solidification (Core spec, error handling, and roadmap realignment nearly complete)
+    - [~] Phase 2: Core Parser Implementation (Lexer complete, parser and error handling in progress)
+    - [ ] Phase 3: Testing & Validation (Test suite scaffolded, pytest and pre-commit integrated)
     - [ ] Phase 4: CLI Tooling & Basic Conversion
     - [ ] Phase 5: Documentation & Examples
     - [ ] Phase 6: Refinement & Extensibility
+
+header: Tooling & Quality
+  text: Dev container, pre-commit hooks (black, isort, ruff, bandit, pytest), and test scaffolding are in place. Roadmap realigned to move testing and documentation to later phases. Code quality and security enforced from the start.
 
 header: Current Version
   text: Specification v1.0.0 

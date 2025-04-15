@@ -15,11 +15,41 @@ header: Core Problem Solved
 header: Development Roadmap (Generated tick-0000000003)
 
 header: Phase 1: Specification Solidification
-  text: Laying the foundation.
+  text: Laying the foundation with comprehensive specification and error handling.
   list:
     - 1.1: Define Token Schema in `spec/TOKEN-SCHEMA.nmc` (Formal token list & rules).
     - 1.2: Create `spec/GRAMMAR.md` (Formal syntax rules, EBNF-like).
     - 1.3: Review complete spec documents for consistency.
+    - 1.4: Add Error Handling Framework
+      list:
+        - Define error types and recovery strategies
+        - Implement graceful degradation
+        - Create meaningful error messages
+        - Add context-aware error reporting
+    - 1.5: Add Migration Framework
+      list:
+        - Create version detection system
+        - Define migration rules
+        - Implement migration tools
+        - Add migration reporting
+    - 1.6: Add Security & Validation
+      list:
+        - Create security guidelines
+        - Implement content validation
+        - Add schema validation
+        - Define extension security rules
+    - 1.7: Add Testing Framework
+      list:
+        - Create test suite specification (moved to Phase 3)
+        - Define error case tests (moved to Phase 3)
+        - Add migration test cases (moved to Phase 3)
+        - Implement performance benchmarks (moved to Phase 3)
+    - 1.8: Add Documentation
+      list:
+        - Create changelog system (moved to Phase 5)
+        - Document compatibility rules (moved to Phase 5)
+        - Add tooling guidelines (moved to Phase 5)
+        - Create examples and best practices (moved to Phase 5)
 
 header: Phase 2: Core Parser Implementation (Python v1)
   text: Bringing the spec to life.
@@ -33,9 +63,11 @@ header: Phase 2: Core Parser Implementation (Python v1)
 header: Phase 3: Testing & Validation
   text: Ensuring robustness.
   list:
-    - 3.1: Create comprehensive `.nmc` test suite in `tests/fixtures/`.
-    - 3.2: Write unit tests for parser components (`tests/unit/`).
-    - 3.3: Write integration tests using fixtures (`tests/integration/`).
+    - 3.1: Create comprehensive `.nmc` test suite in `tests/fixtures/` (moved from 1.7)
+    - 3.2: Write unit tests for parser components (`tests/unit/`) (moved from 1.7)
+    - 3.3: Write integration tests using fixtures (`tests/integration/`) (moved from 1.7)
+    - 3.4: Add migration test cases (moved from 1.7)
+    - 3.5: Implement performance benchmarks (moved from 1.7)
 
 header: Phase 4: CLI Tooling & Basic Conversion (Python v1)
   text: Making it usable.
@@ -47,9 +79,13 @@ header: Phase 4: CLI Tooling & Basic Conversion (Python v1)
 header: Phase 5: Documentation & Examples
   text: Driving adoption.
   list:
-    - 5.1: Create `docs/USAGE.md` (Writing `.nmc`, using CLI).
-    - 5.2: Document parser library API (if applicable).
-    - 5.3: Create `examples/` directory with diverse use cases.
+    - 5.1: Create `docs/USAGE.md` (Writing `.nmc`, using CLI)
+    - 5.2: Document parser library API (if applicable)
+    - 5.3: Create `examples/` directory with diverse use cases
+    - 5.4: Create changelog system (moved from 1.8)
+    - 5.5: Document compatibility rules (moved from 1.8)
+    - 5.6: Add tooling guidelines (moved from 1.8)
+    - 5.7: Create best practices documentation (moved from 1.8)
 
 header: Phase 6: Refinement & Extensibility
   text: Future-proofing.

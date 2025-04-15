@@ -1,14 +1,24 @@
 ---
 fileWeight: medium
 linkedPatterns: []
-confidenceRating: 0.95
-triggeredByTick: tick-0000000009
+confidenceRating: 0.97
+triggeredByTick: tick-000000000A
 ---
 
 header: Active Context
-  text: Implemented Token definitions and Lexer for Nomenic Core format. Now able to tokenize .nmc files according to TOKEN-SCHEMA.nmc.
-  status: Phase 2 (Core Parser Implementation) in progress.
-  focus: Step 2.3 (Lexer/Tokenizer) completed. Next is Step 2.4 (Parser implementation).
+  text: Dev container and modern Python tooling integrated. Pre-commit hooks for black, isort, ruff, bandit, and pytest are active. Test suite scaffolded. Error handling and parser scaffolding in progress. Roadmap realigned to move testing and documentation to later phases.
+  status: Phase 1 (Specification Solidification) nearly complete; parser and error handling in progress.
+  focus: Code quality, security, and test automation enforced from the start.
+
+header: Session Prep (from last /umb)
+  summary: "Dev container and pre-commit hooks (black, isort, ruff, bandit, pytest) integrated. Roadmap realigned. Error handling and parser scaffolding in progress."
+  sourceFiles:
+    - requirements-dev.txt
+    - pyproject.toml
+    - .pre-commit-config.yaml
+    - tests/unit/test_errors.py
+    - _memory_bank/projectBrief.md
+  nextSessionCue: "Implement migration/version detection and validation logic in the parser. Expand test suite as parser and lexer mature."
 
 header: Session Prep (Post-Lexer-Implementation)
   summary: "Implemented Token and TokenType classes in `tokens.py`. Created a full Lexer implementation in `lexer.py` that processes Nomenic Core files line-by-line and generates a stream of tokens. Updated package exports in `__init__.py`."
