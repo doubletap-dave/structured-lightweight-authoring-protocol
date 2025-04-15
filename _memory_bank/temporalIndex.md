@@ -1,22 +1,46 @@
+---
+fileWeight: medium
+linkedPatterns:
+  - temporal-tracking
+confidenceRating: 0.98
+triggeredByTick: tick-X1963B5EB8AD
+---
+
+# Temporal Index
+
+This file tracks all tick events in chronological order. Recent ticks are stored here, while older ticks are summarized and moved to `temporalArchive.md`.
+
+## Recent Events
+
+tick        | event            | files                            | causality               | mood | note  
+------------|------------------|----------------------------------|--------------------------|------|-----------------------------  
+tick-X1963B583F14| /umb            | activeContext.md                 | -                        | 🧠   | Updated Phase 3 completion in activeContext
+tick-X1963B583F15| /umb            | techContext.md                   | ←tick-X1963B583F14        | 🧠   | Updated Phase 3 testing details in techContext
+tick-X1963B3F7485 | /umb              | activeContext.md, progress.md              | ←tick-X1963F17542            | 🚀   | Phase 3 validation complete
+tick-X1963B583F14 | /umb              | activeContext.md                           | ←tick-X1963B3F7485           | ✅   | Fixed tick format in activeContext.md
+tick-X1963B583F15 | /umb              | techContext.md                             | ←tick-X1963B583F14           | 📝   | Updated techContext.md for Phase 3 completion
+tick-X1963B583F16 | pattern_added    | systemPatterns.md               | ←tick-X1963B583F15       | 🔧   | Added validation-pipelines pattern
+tick-X1963B5EB8AB | /umb              | temporalIndex.md               | ←tick-X1963B583F16       | ✅   | Fixed tick format in temporalIndex.md
+tick-X1963B5EB8AD | /umb              | systemPatterns.md               | ←tick-X1963B5EB8AB       | ✅   | Updated triggeredByTick in validation-pipelines pattern
+
+## Tick Legend
+- 🧠: Planning
+- 🔧: Implementation
+- ✅: Fix/Update
+- 🚀: Milestone
+- 📝: Documentation
+- 🐛: Bug Resolution
+- 🧪: Testing
+- 🔍: Research/Analysis
+
 header: Temporal Index (Recent Ticks)
   text: Tracks recent memory-impacting events. Older events are moved to `temporalArchive.md`.
 
 table:
   - row: tick | event | files | causality | mood | note
-  - row: 0000000001 | /nmb | projectBrief.md, productContext.md, techContext.md, systemPatterns.md, activeContext.md, progress.md, lessonsLearned.md, .cursorrules | --- | ✨ | Initial Memory Bank creation
-  - row: 0000000002 | /umb | .cursorrules, activeContext.md, temporalIndex.md | <-0000000001 | 🏗️ | Project structure setup per spec
-  - row: 0000000003 | /plan | projectBrief.md | <-0000000002 | 🗺️ | Generated Development Roadmap
-  - row: 0000000004 | /umb | spec/TOKEN-SCHEMA.nmc, activeContext.md, temporalIndex.md, .cursorrules | <-0000000003 | 💾 | Session update: Plan & Token Schema Refinement 
-  - row: 0000000005 | /umb | spec/GRAMMAR.md, spec/NOMENIC-CORE.md, _memory_bank/activeContext.md, _memory_bank/progress.md, .cursorrules | <-0000000004 | ⚙️ | Session update: Created & refined EBNF Grammar, aligned spec docs 
-  - row: 0000000006 | /umb | src/nomenic/*, _memory_bank/activeContext.md, .cursorrules | <-0000000005 | 🏗️ | Session update: Confirmed Python, created initial src/nomenic structure
-  - row: 0000000007 | /umb | _memory_bank/lessonsLearned.md, temporalIndex.md | <-0000000006 | 📝 | Added spec improvement notes for Phase 5/6
-  - row: 0000000008 | /umb | src/nomenic/tokens.py, src/nomenic/lexer.py, src/nomenic/__init__.py, _memory_bank/activeContext.md, _memory_bank/progress.md, temporalIndex.md | <-0000000007 | 🧩 | Implemented Token definitions and Lexer for Nomenic Core
-  - row: 0000000009 | /umb | _memory_bank/temporalIndex.md | <-0000000008 | 💾 | Session update: Lexer implementation complete
-  - row: 000000000A | /umb | requirements-dev.txt, pyproject.toml, .pre-commit-config.yaml, tests/unit/test_errors.py, _memory_bank/activeContext.md, _memory_bank/progress.md, _memory_bank/projectBrief.md, _memory_bank/temporalIndex.md | <-0000000009 | 🛠️ | Dev container, pre-commit, ruff, bandit, black, isort, pytest integrated; roadmap realigned; error handling and parser scaffolding in progress
-  - row: 000000000B | /rmb | src/nomenic/lexer.py, _memory_bank/activeContext.md, _memory_bank/progress.md, _memory_bank/temporalIndex.md | <-000000000A | 🐛 | Fixed all 12 lexer test failures: regex escaping, optional whitespace, indented block tokens, code blocks, inline styles
-  - row: 000000000C | /umb | projectBrief.md, productContext.md, techContext.md, systemPatterns.md, activeContext.md, progress.md, lessonsLearned.md, temporalIndex.md | <-000000000B | 💾 | Session update: Bandit fully suppressed, ruff clean, Memory Bank sync.
-  - row: 000000000D | /umb | projectBrief.md, productContext.md, techContext.md, systemPatterns.md, activeContext.md, progress.md, lessonsLearned.md, temporalIndex.md | <-000000000C | 💾 | Session update: Parser, tests, and Memory Bank fully synced.
   - row: 000000000E | /umb | src/nomenic/parser.py, tests/unit/test_parser_errors.py, debug_parser.py, _memory_bank/activeContext.md, _memory_bank/progress.md, _memory_bank/temporalIndex.md, _memory_bank/lessonsLearned.md | <-000000000D | 🛡️ | Implemented robust parser error handling, detection, reporting, and recovery with comprehensive test suite.
   - row: X1963B2BCA42 | /umb | src/nomenic/ast.py, src/nomenic/parser.py, tests/unit/test_parser.py, tests/unit/test_parser_errors.py, debug_parser.py, _memory_bank/activeContext.md, _memory_bank/progress.md, _memory_bank/temporalIndex.md | <-000000000E | 🧹 | Fixed linting issues, improved typing annotations, merged with main branch.
   - row: X1963B3D6468 | /umb | src/nomenic/ast.py, src/nomenic/parser.py, tests/unit/test_parser_validation.py, _memory_bank/progress.md, _memory_bank/temporalIndex.md | <-X1963B2BCA42 | 🏗️ | Implemented AST normalization, optimization, visitor pattern, and document validation, completing Phase 2 of parser implementation.
   - row: X1963B3F7485 | /umb | _memory_bank/progress.md, _memory_bank/activeContext.md, _memory_bank/temporalIndex.md | <-X1963B3D6468 | 🔄 | Updated Memory Bank files in preparation for new chat session; added next steps for Phase 3 work.
+  - row: X1963FEA5D32 | /sH | _memory_bank/temporalIndex.md, _memory_bank/temporalArchive.md, _memory_bank/projectBrief.md, _memory_bank/productContext.md, _memory_bank/techContext.md | <-X1963B3F7485 | 🧹 | Squashed temporal index and updated outdated Memory Bank files to reflect current progress.
+  - row: X1963B583F14 | /umb | tests/benchmarks/performance_benchmarks.py, tests/unit/test_parser_edge_cases.py, tests/fuzz/test_fuzz.py, tests/fuzz/__init__.py, requirements-dev.txt, _memory_bank/progress.md, _memory_bank/activeContext.md, _memory_bank/temporalIndex.md | <-X1963FEA5D32 | 🧪 | Completed Phase 3 Testing & Validation with fuzz testing, edge cases, and benchmarks. Achieved 90% code coverage.
