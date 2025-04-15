@@ -1,8 +1,8 @@
 ---
 fileWeight: low
 linkedPatterns: []
-confidenceRating: 0.5
-triggeredByTick: tick-000000000C
+confidenceRating: 0.85
+triggeredByTick: tick-000000000E
 ---
 
 header: Lessons Learned
@@ -15,4 +15,12 @@ header: Specification Improvements (For Phase 5/6)
     - Create visual syntax diagrams to complement EBNF grammar (Phase 5)
     - Add compatibility notes comparing Nomenic to Markdown/YAML/XML for users transitioning (Phase 5)
 
-# (Empty - No lessons learned yet during bootstrap) 
+header: Parser Implementation
+  list:
+    - Error recording vs. error reporting: Having two separate mechanisms (record vs raise) provides flexibility
+    - Recovery with synchronization: Advancing to statement boundaries after errors allows for more complete parsing
+    - Error token context: Storing the token with each error message provides invaluable position information
+    - Testing error scenarios separately: Specialized test files for error handling ensure robustness
+    - Diagnostic tools: Creating simple tools for error detection streamlines debugging
+    - Error categories: Grouping errors by type (header, list, code, multiline) aids in documentation and testing
+    - Progressive enhancements: Adding error handling incrementally prevents regression in core functionality 

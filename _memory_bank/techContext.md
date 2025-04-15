@@ -3,7 +3,7 @@ fileWeight: high
 linkedPatterns:
   - nomenic-core-syntax
 confidenceRating: 0.9
-triggeredByTick: tick-000000000C
+triggeredByTick: tick-000000000E
 ---
 
 header: Technical Context: Nomenic Core v1.0.0
@@ -29,6 +29,15 @@ header: Parsing & Implementation
     - Parsers should be fault-tolerant, logging errors and attempting recovery.
     - Flexible output targets (HTML, Markdown, JSON, tokens).
     - Short token aliases (`m:`, `h:`, `t:`, etc.) may be supported.
+
+header: Error Handling Capabilities
+  list:
+    - Two-level error handling: record (continue) or report (raise exception)
+    - Common error detection: missing content in headers, lists, code blocks
+    - Error position tracking with line and column numbers
+    - Recovery mechanism using synchronization to statement boundaries
+    - Diagnostic information with token context
+    - Special handling for unterminated blocks and unexpected delimiters
 
 header: File Extension
   text: `.nmc` 

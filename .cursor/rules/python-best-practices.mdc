@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Write clean, idiomatic Python code following PEP 8 (Black format). Use type hints, descriptive variable names, and comprehensive docstrings (Google or NumPy style). Favor composition over inheritance and explicit over implicit. Utilize list/dict comprehensions for clarity. Follow SOLID principles and design patterns appropriate for the task. Structure with contextual error handling - catch specific exceptions, not broad. Leverage batteries-included standard library before external dependencies. Implement testing with pytest including parameterized and edge cases. Use virtual environments with pinned dependencies. Run code quality checks with flake8, black (line length 88), mypy (strict mode), isort, and bandit for security. Optimize only after profiling identifies bottlenecks.
