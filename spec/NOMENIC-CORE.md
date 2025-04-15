@@ -126,7 +126,10 @@ The core primitives of Nomenic documents:
   list:
     - item one
     - item two
+    1. ordered item one
+    a. ordered item two
   ```
+- **Note:** Supports both unordered (`-`) and ordered (`1.`, `a.`, `i.`, etc.) list item markers followed by a space.
 
 ### code:
 
