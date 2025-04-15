@@ -1,0 +1,42 @@
+meta:
+  title: Invalid Document
+  author: Test User
+  date: 2024-03-15
+  version: 1.0.0
+
+header: Invalid Document
+  text: This is an invalid Nomenic Core document for testing error handling.
+
+section: Invalid Indentation
+  text: This section has invalid indentation
+   text: This line has wrong indentation (3 spaces)
+
+section: Invalid List
+  text: This section contains invalid list syntax
+  list:
+    - Item 1
+    Item 2  # Missing dash
+    - Item 3
+
+section: Invalid Code
+  text: Here's a malformed code example:
+  code: |
+    def hello_world()
+        print("Hello, World!")  # Missing colon
+
+section: Invalid Custom Directive
+  text: This section contains invalid custom directives
+  x-invalid key: This has invalid key format
+  x-another: This is valid but will fail due to previous error
+
+section: Invalid Inline Styles
+  text: This text has @b(unclosed style
+  text: This text has @i(italic) but @b(bold is unclosed
+
+section: Invalid Metadata
+  text: This section contains invalid metadata
+  metadata:
+    author: Test User
+    date: 2024-03-15
+    version: 1.0.0
+    invalid: key  # Invalid key format 

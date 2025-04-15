@@ -1,0 +1,41 @@
+meta:
+  title: Sample Document
+  author: Test User
+  date: 2024-03-15
+  version: 1.0.0
+
+header: Sample Document
+  text: This is a sample Nomenic Core document for testing purposes.
+
+section: Test Section
+  text: This section contains various test elements.
+  list:
+    - Item 1
+    - Item 2
+    - Item 3
+
+section: Code Example
+  text: Here's a code example:
+  code: |
+    def hello_world():
+        print("Hello, World!")
+
+section: Callouts
+  note: This is a note callout
+  warn: This is a warning callout
+  tip: This is a tip callout
+
+section: Custom Directives
+  x-custom: This is a custom directive
+  x-another: This is another custom directive
+
+section: Inline Styles
+  text: This text has @b(bold), @i(italic), and @c(code) styles.
+  text: Here's a @l(link) to something.
+
+section: Metadata
+  text: This section contains metadata.
+  metadata:
+    author: Test User
+    date: 2024-03-15
+    version: 1.0.0 

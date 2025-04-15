@@ -3,24 +3,36 @@ repos:
     rev: 24.3.0
     hooks:
       - id: black
+        language_version: python3.9
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
     hooks:
       - id: isort
+        args: ["--profile", "black"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.3.7
     hooks:
       - id: ruff
+        args: ["--fix"]
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.8.0
+#    hooks:
+#      - id: mypy
+#        # Use pyproject.toml for configuration
+#        # Explicitly add src to MYPYPATH for the hook
+#        entry: env MYPYPATH=src mypy
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.7
     hooks:
       - id: bandit
-        args: ["-r", "src/"]
-  - repo: https://github.com/pre-commit/mirrors-pytest
-    rev: v7.4.4
+        args: ["--skip", "B101,B105"]
+        additional_dependencies: ["bandit[toml]"]
+  - repo: local
     hooks:
-      - id: pytest
+      - id: pytest-cov
         name: pytest
-        entry: pytest
+        entry: pytest --cov=src --cov-report=term-missing --cov-report=html
         language: system
-        types: [python] 
+        types: [python]
+        pass_filenames: false
+        always_run: true 
