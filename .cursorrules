@@ -1,0 +1,50 @@
+header: Project Intelligence Rules (.cursorrules)
+  text: Stores learned insights, preferences, and metadata structures for the Nomenic Core project.
+
+rules:
+  tickHandling:
+    priority: "high"
+    policy: "All memory-affecting actions must emit a tick, logged in compact form in temporalIndex.md, and archived if needed."
+    archiveTrigger: "tick count > 50 OR token budget exceeded"
+    enforcement: "strict"
+  patternLinking:
+    behavior: "linkedPatterns must be treated as high-signal dependencies"
+    lookupDuring:
+      - /plan
+      - /rmb
+      - /umb
+    preserveDuringEdits: true
+    updateAssociationsInRules: true
+    notes:
+      - During /plan: load and consider all linked pattern files when analyzing related context.
+      - During /rmb: ensure all linked patterns are included in the file scan and sessionPrep.
+      - During /umb: avoid unlinking patterns unless explicitly instructed; verify consistency with systemPatterns.md.
+      - On edits: linkedPatterns should reflect actual usage and be synchronized with .cursorrules patternAssociations.
+
+  code:
+    tickRules:
+      tick-0000000001:
+        event: /nmb
+        summary: "Initial Memory Bank creation"
+        confidence: 0.85
+      tick-0000000002:
+        event: /umb
+        summary: "Project structure setup based on SPECIFICATION.md"
+        confidence: 0.90
+
+  code:
+    patternAssociations:
+      nomenic-core-syntax:
+        definedIn: systemPatterns.md
+        linkedFiles:
+          - _memory_bank/techContext.md
+        description: "Core syntax definition for Nomenic v1.0.0"
+
+  code:
+    # Add other project-specific rules or learned behaviors here.
+    # Example: Formatting preferences, common pitfalls, etc.
+
+header: Session History
+  text: Records of past work sessions derived from /umb commands.
+
+  # (No session history yet) 
