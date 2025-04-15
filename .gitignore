@@ -1,3 +1,6 @@
+# Ugh
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -179,4 +182,4 @@ cython_debug/
 
 /docs
 
-_memory_bank
+_memory_bank/
