@@ -1,12 +1,20 @@
 ---
 fileWeight: low
 linkedPatterns: []
-confidenceRating: 0.85
-triggeredByTick: tick-000000000E
+confidenceRating: 0.90
+triggeredByTick: tick-X1963B2BCA42
 ---
 
 header: Lessons Learned
   text: A log of insights, challenges, and discoveries during the Nomenic Core project.
+
+header: Code Quality & Maintenance
+  list:
+    - Modern typing annotations (PEP 585): Using built-in generics (list[], tuple[]) instead of imports (List, Tuple) improves readability and future-proofs the code
+    - Constants over magic numbers: Using named constants in tests clarifies intent and makes future test updates easier
+    - Line length management: Breaking long comments and strings across multiple lines improves readability
+    - Linter configuration: Selectively suppressing certain checks (B101/B105) where appropriate, while enforcing most rules strictly
+    - Git synchronization: Regularly merging from main prevents divergence and integration headaches
 
 header: Specification Improvements (For Phase 5/6)
   list:
