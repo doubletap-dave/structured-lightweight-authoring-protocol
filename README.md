@@ -1,16 +1,120 @@
 # Nomenic Core
 
-**Nomenic: Structure Everything.**
+<p align="center"><strong>Structure Everything: A Modern Document Format for Humans and Machines</strong></p>
 
-This repository contains the specification, tooling, and documentation for Nomenic Core, a structured authoring format designed for clarity, AI efficiency, and machine-readable precision.
-
----
-
-## Quick Links
-
-*   **Full Specification:** [`spec/NOMENIC-CORE.md`](spec/NOMENIC-CORE.md)
-*   **Documentation & Usage:** [`docs/README.md`](docs/README.md)
+<p align="center">
+  <em>Version 1.0.0 — 2025-04-14</em>
+</p>
 
 ---
 
-Welcome to the project! We aim to provide a better way to structure information. 
+## 🚀 Overview
+
+**Nomenic Core** is a structured document format designed for both human readability and machine parsing, bridging the gap between Markdown's simplicity and YAML's structure. It offers a clean, hierarchical syntax that preserves semantic meaning while remaining easy to author.
+
+Born from the need for documentation that serves both human readers and AI/ML systems, Nomenic provides explicit structure, consistent patterns, and robust error handling.
+
+## ✨ Key Features
+
+- **Explicit Structure** - Clear token markers eliminate ambiguity
+- **Human Readable** - Intuitive syntax designed for both writing and reading
+- **Token Efficient** - Optimized for LLMs and parsers with minimal overhead
+- **Error Tolerant** - Comprehensive error detection, reporting, and recovery
+- **Extensible** - User-defined directives and metadata support
+- **Hierarchical** - Indentation-based nesting for logical organization
+
+## 🔧 Core Components
+
+```
+header: Project Status
+  text: Phase 3 (Testing & Validation) complete!
+  list:
+    - Robust parser implementation ✅
+    - Comprehensive error handling ✅
+    - Test suite with 90% coverage ✅
+    - Performance benchmarks ✅
+  text: Now moving to Phase 4: CLI tools and conversion utilities.
+```
+
+## 📋 Project Status
+
+Nomenic Core has completed 3 of 6 planned phases:
+
+- **✅ Phase 1: Core Specification** - Format design, token schema, grammar rules
+- **✅ Phase 2: Parser Implementation** - Lexer, parser, AST, validation, error handling
+- **✅ Phase 3: Testing & Validation** - Unit tests, fuzz testing, benchmarks, edge cases
+- **🔄 Phase 4: CLI Tooling & Conversion** - Currently in progress
+- **⏱️ Phase 5: Documentation & Examples** - Upcoming
+- **⏱️ Phase 6: Refinement & Extensibility** - Upcoming
+
+## 📚 Documentation
+
+- **[Specification](spec/NOMENIC-CORE.md)** - Full syntax and behavior documentation
+- **[Grammar Rules](spec/GRAMMAR.md)** - Formal EBNF grammar definition
+- **[Token Schema](spec/TOKEN-SCHEMA.nmc)** - Token definitions and structure
+
+## 🛠️ Getting Started
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/nomenic/nomenic-core.git
+cd nomenic-core
+
+# Set up development environment
+python -m pip install -e .
+python -m pip install -r requirements-dev.txt
+```
+
+### Usage (Python Library)
+
+```python
+from nomenic import lexer, parser
+
+# Parse a Nomenic document
+with open("example.nmc", "r") as f:
+    content = f.read()
+    
+tokens = lexer.tokenize(content)
+ast = parser.parse(tokens)
+
+# Work with the AST
+for node in ast.children:
+    print(f"Node type: {node.type}")
+```
+
+### Requirements
+
+- Python 3.9+
+- No external runtime dependencies
+
+## 🧪 Development 
+
+```bash
+# Run tests
+pytest
+
+# Run with coverage
+pytest --cov=src
+
+# Format code
+black src tests
+
+# Lint
+ruff src tests
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+This project is licensed under the BSD 3-Clause - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <em>Nomenic: Because we deserve better than markdown spaghetti.</em>
+</p> 
