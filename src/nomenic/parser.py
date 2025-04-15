@@ -38,6 +38,21 @@ class Parser:
         # List of (message, token) tuples
         self.errors: list[tuple[str, Token]] = []
         self.strict_mode = False  # If True, errors will raise exceptions
+        # Track current indentation level for validation
+        self.current_indent_level = 0
+        # Track document metadata
+        self.metadata: dict = {}
+        # Track validation state
+        self.has_meta_block = False
+
+    def set_strict_mode(self, strict: bool = True) -> None:
+        """
+        Set strict error handling mode.
+
+        Args:
+            strict: If True, errors will raise exceptions. If False, errors will be recorded.
+        """
+        self.strict_mode = strict
 
     def _error(self, message: str, token: Optional[Token] = None) -> None:
         """
@@ -51,7 +66,8 @@ class Parser:
             token = self._peek() or self._previous()
         self.errors.append((message, token))
         if self.strict_mode:
-            raise ParserError(f"{message} at line {token.line}, column {token.column}")
+            error_msg = f"{message} at line {token.line}, column {token.column}"
+            raise ParserError(error_msg)
 
     def _report_error(self, message: str, token: Optional[Token] = None) -> None:
         """
@@ -101,6 +117,56 @@ class Parser:
 
             self._advance()
 
+    def validate_document(self, doc: DocumentNode) -> list[tuple[str, Optional[Token]]]:
+        """
+        Validate the entire document structure after parsing.
+
+        This performs post-parsing validation to ensure:
+        1. Required elements are present (e.g., meta block with version)
+        2. Document structure follows specification rules
+        3. Block relationships are valid (e.g., caption only in figure)
+
+        Args:
+            doc: The parsed DocumentNode
+
+        Returns:
+            List of (error_message, relevant_token) tuples for validation issues
+        """
+        validation_errors: list[tuple[str, Optional[Token]]] = []
+
+        # Check for meta block with version (required per spec)
+        if not self.has_meta_block:
+            validation_errors.append(
+                ("Document should have a meta block with version information", None)
+            )
+        elif "version" not in self.metadata:
+            validation_errors.append(
+                ("Meta block should include version information", None)
+            )
+
+        # Add document-level validations here
+
+        return validation_errors
+
+    def validate_block_structure(
+        self, token: Token, expected_tokens: list[TokenType]
+    ) -> None:
+        """
+        Validate that child elements of a block are allowed within that block.
+
+        Args:
+            token: The current token being processed
+            expected_tokens: List of token types that are valid in this context
+
+        Raises:
+            ParserError: If strict mode is on and validation fails
+        """
+        if token.type not in expected_tokens:
+            expected_names = [t.name for t in expected_tokens]
+            expected_str = ", ".join(expected_names)
+            error_msg = f"Unexpected token {token.type.name} in this context. Expected one of: {expected_str}"
+            self._error(error_msg, token)
+
     def parse(self) -> DocumentNode:
         """
         Parse the token stream into a DocumentNode.
@@ -124,12 +190,28 @@ class Parser:
         """
         document = DocumentNode()
         self.errors = []  # Reset errors before parsing
+        self.has_meta_block = False  # Reset meta block flag
 
         while self.position < len(self.tokens):
             token = self._peek()
             if token is None:
                 break
 
+            # Check for meta blocks at the beginning
+            if token.type == TokenType.META and not self.has_meta_block:
+                self._advance()  # Skip the 'meta:' token
+                self._parse_meta_block(document)
+                self.has_meta_block = True
+                continue
+            elif token.type == TokenType.META and self.has_meta_block:
+                self._error(
+                    "Multiple meta blocks found. Only one is allowed at the document start.",
+                    token,
+                )
+                self._synchronize()
+                continue
+
+            # Parse other block types
             if token.type == TokenType.HEADER:
                 self._advance()  # Skip the 'header:' token
                 value_token = self._peek()
@@ -231,10 +313,10 @@ class Parser:
                 if node:
                     document.children.append(node)
                 else:
-                    self._error(
-                        f"Expected content after custom directive {directive_name}:",
-                        token,
+                    error_msg = (
+                        f"Expected content after custom directive {directive_name}:"
                     )
+                    self._error(error_msg, token)
                     self._synchronize()
             elif token.type == TokenType.TEXT:
                 # Handle text: tokens specifically - there are two cases:
@@ -497,31 +579,77 @@ class Parser:
         return None
 
     def _parse_figure_block(self):
-        children = []
-        # Track metadata (unused now but may be useful later)
-        while not self._is_at_end():
+        """
+        Parse a figure block with src and caption.
+
+        According to the spec, figure blocks should contain a src element
+        and may optionally contain a caption element.
+
+        Returns:
+            BlockNode: A figure block node, or None if parsing failed
+        """
+        # We're already past "figure:" token
+        figure_node = BlockNode(block_type="figure")
+        has_src = False
+
+        # Check for figure alt text
+        if self._peek() and self._peek().type == TokenType.TEXT:
+            alt_text = self._peek().value
+            if alt_text:
+                alt_node = TextNode(text=alt_text)
+                figure_node.children.append(alt_node)
+            self._advance()  # Skip alt text
+
+        # Skip newline after figure: line
+        self._match(TokenType.NEWLINE)
+
+        # Process child elements
+        while True:
+            # Check for indentation
+            if not self._match(TokenType.INDENTATION):
+                break
+
+            # Check for src: or caption:
             token = self._peek()
             if token is None:
                 break
+
             if token.type == TokenType.SRC:
-                self._advance()
-                value_token = self._peek()
-                if value_token and value_token.type == TokenType.TEXT:
-                    children.append(TextNode(text=value_token.value or ""))
-                    self._advance()
+                self._advance()  # Skip 'src:' token
+                src_value = self._peek()
+                if src_value and src_value.type == TokenType.TEXT:
+                    src_text = TextNode(text=src_value.value or "")
+                    figure_node.children.append(src_text)
+                    has_src = True
+                    self._advance()  # Skip src value
+                    self._match(TokenType.NEWLINE)  # Skip newline if present
+                else:
+                    self._error("Expected source path/URL after src:", token)
             elif token.type == TokenType.CAPTION:
-                self._advance()
-                value_token = self._peek()
-                if value_token and value_token.type == TokenType.TEXT:
-                    children.append(TextNode(text=value_token.value or ""))
-                    self._advance()
+                self._advance()  # Skip 'caption:' token
+                caption_value = self._peek()
+                if caption_value and caption_value.type == TokenType.TEXT:
+                    caption_text = TextNode(text=caption_value.value or "")
+                    figure_node.children.append(caption_text)
+                    self._advance()  # Skip caption value
+                    self._match(TokenType.NEWLINE)  # Skip newline if present
+                else:
+                    self._error("Expected caption text after caption:", token)
             elif token.type == TokenType.NEWLINE:
                 self._advance()
             else:
-                break
-        if children:
-            return BlockNode(block_type="figure", children=children)
-        return None
+                error_msg = f"Unexpected token {token.type.name} in figure block. Expected src: or caption:"
+                self._error(error_msg, token)
+                self._synchronize()
+                if self._previous().type == TokenType.NEWLINE:
+                    break
+
+        # Validate figure block - must have src according to spec
+        if not has_src:
+            self._error("Figure block must contain a src: element", self._previous())
+            return None
+
+        return figure_node
 
     def _parse_custom_directive_block(self, directive_name):
         children = []
@@ -656,6 +784,51 @@ class Parser:
         # Empty block, but valid syntax
         return TextNode(text="")
 
+    def _parse_meta_block(self, document: DocumentNode) -> None:
+        """
+        Parse a meta block and extract key-value pairs.
+
+        Meta blocks contain document metadata like version, author, etc.
+        According to the spec, each document should have a meta block with version info.
+
+        Args:
+            document: The DocumentNode to populate with metadata
+        """
+        meta_token = self._previous()  # The 'meta:' token
+        value_token = self._peek()
+
+        if value_token and value_token.type == TokenType.TEXT and value_token.value:
+            # Process meta key-value pairs
+            meta_text = value_token.value.strip()
+            meta_pairs = meta_text.split(",")
+
+            # Create a metadata dictionary
+            meta_dict = {}
+
+            for raw_item in meta_pairs:
+                clean_item = raw_item.strip()
+                if "=" in clean_item:
+                    key, value = clean_item.split("=", 1)
+                    meta_dict[key.strip()] = value.strip()
+                else:
+                    self._error(
+                        f"Invalid meta key-value pair: {clean_item}", value_token
+                    )
+
+            # Store metadata for validation
+            self.metadata = meta_dict
+
+            # Add to document
+            from .ast import BlockNode
+
+            meta_node = BlockNode(block_type="meta", meta=meta_dict)
+            document.children.append(meta_node)
+
+            self._advance()  # Move past the value token
+        else:
+            self._error("Expected key-value pairs after meta:", meta_token)
+            self._synchronize()
+
     def _peek(self) -> Optional[Token]:
         """Return the next token without consuming it."""
         if self._is_at_end():
@@ -710,6 +883,33 @@ class Parser:
 
 
 def parse(tokens: list[Token]) -> DocumentNode:
-    """Convenience function to parse Nomenic tokens."""
+    """
+    Parse a stream of tokens into a DocumentNode.
+
+    This is a convenience function that creates a Parser instance and calls its
+    parse method.
+
+    Args:
+        tokens: A list of Token objects from the lexer
+
+    Returns:
+        DocumentNode containing the full parsed AST
+
+    Raises:
+        ParserError: If a parsing error occurs
+    """
     parser = Parser(tokens)
-    return parser.parse()
+    document = parser.parse()
+
+    # Perform post-parsing validation
+    validation_errors = parser.validate_document(document)
+    for message, token in validation_errors:
+        if token:
+            parser._error(message, token)
+        else:
+            parser.errors.append((message, None))
+
+    # Normalize and optimize the AST
+    document = document.normalize().optimize()
+
+    return document

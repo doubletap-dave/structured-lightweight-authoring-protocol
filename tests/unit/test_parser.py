@@ -172,8 +172,8 @@ blockquote:
 def test_parse_figure_block():
     source = """
 figure:
-src: /images/example.png
-caption: Example Figure
+  src: /images/example.png
+  caption: Example Figure
 """
     tokens = tokenize(source)
     ast = parse(tokens)
