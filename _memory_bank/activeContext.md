@@ -1,21 +1,22 @@
 ---
 fileWeight: medium
 linkedPatterns: []
-confidenceRating: 0.75
-triggeredByTick: tick-0000000002
+confidenceRating: 0.85
+triggeredByTick: tick-0000000004
 ---
 
 header: Active Context
-  text: Memory Bank initialized. Project structure created according to `spec/NOMENIC-CORE.md`.
-  status: Initial Setup Complete
-  focus: Preparing for implementation or further documentation population.
+  text: Development plan established. Specification refinement phase initiated with updates to the token schema.
+  status: Specification Refinement In Progress
+  focus: Completing Phase 1 (Specification Solidification) - next step is creating `spec/GRAMMAR.md`.
 
-header: Session Prep (Post-Structure Setup)
-  summary: "Project file structure created based on spec. Core files moved. Root README added."
+header: Session Prep (Post-Spec-Phase1.1)
+  summary: "Generated development roadmap. Updated TOKEN-SCHEMA.nmc with new block types (dl/dt/dd, bq, fig), style tokens (@b, @i, @c, @l), comments (#), and escape character (\\)."
   sourceFiles:
-    - spec/NOMENIC-CORE.md
-    - docs/README.md
-    - README.md
+    - _memory_bank/projectBrief.md
+    - spec/TOKEN-SCHEMA.nmc
+    - docs/genesis.md
     - _memory_bank/temporalIndex.md
-    - .cursorrules
-  nextSessionCue: "Begin populating spec/ (e.g., TOKEN-SCHEMA.nmc) or start implementation in src/ or cli/." 
+  nextSessionCue: "Proceed with Phase 1, Step 1.2: Create spec/GRAMMAR.md."
+
+# Previous Session Prep block removed for brevity 
