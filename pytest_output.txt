@@ -1,0 +1,56 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.10, pytest-8.3.5, pluggy-1.5.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+benchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(PosixPath('/workspaces/nomenic-core/.hypothesis/examples'))
+rootdir: /workspaces/nomenic-core
+configfile: pyproject.toml
+plugins: benchmark-5.1.0, hypothesis-6.131.0, cov-6.1.1, mock-3.14.0, xdist-3.6.1
+collecting ... collected 1 item
+
+tests/unit/debug/test_core.py::test_debug_output_json FAILED             [100%]
+
+=================================== FAILURES ===================================
+____________________________ test_debug_output_json ____________________________
+
+    def test_debug_output_json():
+        """Test JSON output format."""
+        # Get JSON format
+        print("Starting test_debug_output_json")
+        result = debug(SAMPLE_CONTENT, mode="tokens", output_format="json")
+        print(f"Result type: {type(result)}")
+        print(f"Result contents: {result}")
+    
+        # Check JSON structure
+        assert isinstance(result, dict)
+>       assert "results" in result
+E       assert 'results' in {'result': [{'type': 'NEWLINE', 'value': '\\n', 'line': 1, 'column': 1}, {'type': 'HEADER', 'value': 'header:', 'line': 2, 'column': 1}, {'type': 'TEXT', 'value': 'Test Document', 'line': 2, 'column': 9}, {'type': 'NEWLINE', 'value': '\\n', 'line': 2, 'column': 22}, {'type': 'TEXT', 'value': 'text:', 'line': 3, 'column': 1}, {'type': 'TEXT', 'value': 'This is a sample document with ', 'line': 3, 'column': 7}, {'type': 'STYLE_BOLD', 'value': 'bold', 'line': 3, 'column': 38}, {'type': 'TEXT', 'value': ' text.', 'line': 3, 'column': 46}, {'type': 'NEWLINE', 'value': '\\n', 'line': 3, 'column': 52}, {'type': 'LIST', 'value': 'list:', 'line': 4, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 4, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 5, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 5, 'column': 3}, {'type': 'TEXT', 'value': 'First item', 'line': 5, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 5, 'column': 15}, {'type': 'INDENTATION', 'value': '  ', 'line': 6, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 6, 'column': 3}, {'type': 'TEXT', 'value': 'Second item', 'line': 6, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 6, 'column': 16}, {'type': 'CODE', 'value': 'code:', 'line': 7, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 7, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 8, 'column': 1}, {'type': 'TEXT', 'value': 'print("Hello, world!")', 'line': 8, 'column': 3}, {'type': 'EOF', 'value': '', 'line': 9, 'column': 1}]}
+
+tests/unit/debug/test_core.py:110: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Starting test_debug_output_json
+Result type: <class 'dict'>
+Result contents: {'result': [{'type': 'NEWLINE', 'value': '\\n', 'line': 1, 'column': 1}, {'type': 'HEADER', 'value': 'header:', 'line': 2, 'column': 1}, {'type': 'TEXT', 'value': 'Test Document', 'line': 2, 'column': 9}, {'type': 'NEWLINE', 'value': '\\n', 'line': 2, 'column': 22}, {'type': 'TEXT', 'value': 'text:', 'line': 3, 'column': 1}, {'type': 'TEXT', 'value': 'This is a sample document with ', 'line': 3, 'column': 7}, {'type': 'STYLE_BOLD', 'value': 'bold', 'line': 3, 'column': 38}, {'type': 'TEXT', 'value': ' text.', 'line': 3, 'column': 46}, {'type': 'NEWLINE', 'value': '\\n', 'line': 3, 'column': 52}, {'type': 'LIST', 'value': 'list:', 'line': 4, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 4, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 5, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 5, 'column': 3}, {'type': 'TEXT', 'value': 'First item', 'line': 5, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 5, 'column': 15}, {'type': 'INDENTATION', 'value': '  ', 'line': 6, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 6, 'column': 3}, {'type': 'TEXT', 'value': 'Second item', 'line': 6, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 6, 'column': 16}, {'type': 'CODE', 'value': 'code:', 'line': 7, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 7, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 8, 'column': 1}, {'type': 'TEXT', 'value': 'print("Hello, world!")', 'line': 8, 'column': 3}, {'type': 'EOF', 'value': '', 'line': 9, 'column': 1}]}
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.10-final-0 _______________
+
+Name                                Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------
+src/nomenic/__init__.py                 5      0   100%
+src/nomenic/ast.py                     97     97     0%   6-265
+src/nomenic/debug/__init__.py           2      0   100%
+src/nomenic/debug/core.py              41     27    34%   37-47, 52-57, 66, 70, 78-89, 94-99
+src/nomenic/debug/file_utils.py        73     73     0%   3-204
+src/nomenic/debug/parser_utils.py      72     72     0%   3-213
+src/nomenic/debug/style_utils.py       46     46     0%   3-186
+src/nomenic/debug/token_utils.py       60     40    33%   34-40, 58-66, 87-98, 119-141, 146-169
+src/nomenic/errors.py                   6      0   100%
+src/nomenic/lexer.py                  248    135    46%   72-73, 122, 143-424, 452-472, 489-496, 504-513, 517-529, 542, 558-590, 619-620, 624, 632, 664, 673, 682, 739-740
+src/nomenic/parser.py                 471    471     0%   8-915
+src/nomenic/tokens.py                  48      1    98%   75
+-----------------------------------------------------------------
+TOTAL                                1169    962    18%
+Coverage HTML written to dir htmlcov
+=========================== short test summary info ============================
+FAILED tests/unit/debug/test_core.py::test_debug_output_json - assert 'results' in {'result': [{'type': 'NEWLINE', 'value': '\\n', 'line': 1, 'column': 1}, {'type': 'HEADER', 'value': 'header:', 'line': 2, 'column': 1}, {'type': 'TEXT', 'value': 'Test Document', 'line': 2, 'column': 9}, {'type': 'NEWLINE', 'value': '\\n', 'line': 2, 'column': 22}, {'type': 'TEXT', 'value': 'text:', 'line': 3, 'column': 1}, {'type': 'TEXT', 'value': 'This is a sample document with ', 'line': 3, 'column': 7}, {'type': 'STYLE_BOLD', 'value': 'bold', 'line': 3, 'column': 38}, {'type': 'TEXT', 'value': ' text.', 'line': 3, 'column': 46}, {'type': 'NEWLINE', 'value': '\\n', 'line': 3, 'column': 52}, {'type': 'LIST', 'value': 'list:', 'line': 4, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 4, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 5, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 5, 'column': 3}, {'type': 'TEXT', 'value': 'First item', 'line': 5, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 5, 'column': 15}, {'type': 'INDENTATION', 'value': '  ', 'line': 6, 'column': 1}, {'type': 'LIST_ITEM', 'value': '- ', 'line': 6, 'column': 3}, {'type': 'TEXT', 'value': 'Second item', 'line': 6, 'column': 5}, {'type': 'NEWLINE', 'value': '\\n', 'line': 6, 'column': 16}, {'type': 'CODE', 'value': 'code:', 'line': 7, 'column': 1}, {'type': 'NEWLINE', 'value': '\\n', 'line': 7, 'column': 6}, {'type': 'INDENTATION', 'value': '  ', 'line': 8, 'column': 1}, {'type': 'TEXT', 'value': 'print("Hello, world!")', 'line': 8, 'column': 3}, {'type': 'EOF', 'value': '', 'line': 9, 'column': 1}]}
+============================== 1 failed in 3.54s ===============================
