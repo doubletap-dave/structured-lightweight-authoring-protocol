@@ -6,8 +6,8 @@ This package provides tools for working with Nomenic Document Language (NDL) fil
 from .lexer import Lexer, tokenize
 from .parser import Parser
 from .ast import (
-    Node, DocumentNode, MetaNode, HeaderNode,
-    TextNode, ListNode, CodeNode, TableNode
+    ASTNode, DocumentNode, HeaderNode,
+    TextNode, ListNode, BlockNode,
 )
 
 # For CLI access
@@ -21,6 +21,6 @@ __version__ = "0.1.0"
 
 __all__ = [
     "Lexer", "tokenize", "Parser",
-    "Node", "DocumentNode", "MetaNode", "HeaderNode",
-    "TextNode", "ListNode", "CodeNode", "TableNode",
+    "ASTNode", "DocumentNode", "HeaderNode",
+    "TextNode", "ListNode", "BlockNode",
 ]

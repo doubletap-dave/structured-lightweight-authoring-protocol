@@ -6,14 +6,11 @@ from typing import Any, Dict, List, Optional, Union
 
 from .. import Lexer, Parser
 from ..ast import (
+    ASTNode,
     BlockNode,
-    CodeNode,
     DocumentNode,
     HeaderNode,
     ListNode,
-    MetaNode,
-    Node,
-    TableNode,
     TextNode,
 )
 
@@ -67,20 +64,23 @@ def render_html(
 
     # Add metadata if present and requested
     if include_meta:
-        meta_node = next(
-            (node for node in document.children if isinstance(node, MetaNode)), None)
-        if meta_node:
-            for key, value in meta_node.items.items():
+        meta_block = next(
+            (node for node in document.children if isinstance(
+                node, BlockNode) and node.block_type == "meta"),
+            None
+        )
+        if meta_block and hasattr(meta_block, 'meta') and meta_block.meta:
+            for key, value in meta_block.meta.items():
                 # Skip internal metadata
                 if key.startswith("_"):
                     continue
 
                 html_parts.append(
-                    f'<meta name="nomenic:{key}" content="{html.escape(value)}">\n')
+                    f'<meta name="nomenic:{key}" content="{html.escape(str(value))}">\n')
 
             # Use title from metadata if available
-            title = meta_node.items.get("title", "Nomenic Document")
-            html_parts.append(f"<title>{html.escape(title)}</title>\n")
+            title = meta_block.meta.get("title", "Nomenic Document")
+            html_parts.append(f"<title>{html.escape(str(title))}</title>\n")
         else:
             html_parts.append("<title>Nomenic Document</title>\n")
     else:
@@ -91,8 +91,8 @@ def render_html(
 
     # Process document nodes
     for node in document.children:
-        # Skip meta node, already processed
-        if isinstance(node, MetaNode):
+        # Skip meta block, already processed
+        if isinstance(node, BlockNode) and node.block_type == "meta":
             continue
 
         html_parts.append(_render_node(node, 0))
@@ -103,7 +103,7 @@ def render_html(
     return "".join(html_parts)
 
 
-def _render_node(node: Node, depth: int = 0) -> str:
+def _render_node(node: ASTNode, depth: int = 0) -> str:
     """
     Render a node as HTML.
 
@@ -120,9 +120,9 @@ def _render_node(node: Node, depth: int = 0) -> str:
         return _render_text(node, depth)
     elif isinstance(node, ListNode):
         return _render_list(node, depth)
-    elif isinstance(node, CodeNode):
+    elif isinstance(node, BlockNode) and node.block_type == "code":
         return _render_code(node, depth)
-    elif isinstance(node, TableNode):
+    elif isinstance(node, BlockNode) and node.block_type == "table":
         return _render_table(node, depth)
     elif isinstance(node, BlockNode):
         # Generic block node, render children
@@ -139,10 +139,10 @@ def _render_node(node: Node, depth: int = 0) -> str:
 def _render_header(node: HeaderNode, depth: int) -> str:
     """Render a header node as HTML."""
     # Convert content to HTML, handling basic formatting
-    content = _process_inline_formatting(node.content)
+    content = _process_inline_formatting(node.text)
 
     # Create id from header for linking
-    header_id = node.content.lower().replace(" ", "-")
+    header_id = node.text.lower().replace(" ", "-")
 
     return f"<h{min(depth + 1, 6)} id=\"{header_id}\" class=\"nomenic-header\">{content}</h{min(depth + 1, 6)}>\n"
 
@@ -150,7 +150,7 @@ def _render_header(node: HeaderNode, depth: int) -> str:
 def _render_text(node: TextNode, depth: int) -> str:
     """Render a text node as HTML."""
     # Convert content to HTML, handling basic formatting
-    content = _process_inline_formatting(node.content)
+    content = _process_inline_formatting(node.text)
 
     return f"<p class=\"nomenic-text\">{content}</p>\n"
 
@@ -160,20 +160,30 @@ def _render_list(node: ListNode, depth: int) -> str:
     result = "<ul class=\"nomenic-list\">\n"
 
     for item in node.items:
-        # Process inline formatting in list items
-        item_content = _process_inline_formatting(item)
+        # Process inline formatting
+        if isinstance(item, TextNode):
+            item_content = _process_inline_formatting(item.text)
+        else:
+            item_content = _render_node(item, depth + 1)
         result += f"<li>{item_content}</li>\n"
 
     result += "</ul>\n"
     return result
 
 
-def _render_code(node: CodeNode, depth: int) -> str:
+def _render_code(node: BlockNode, depth: int) -> str:
     """Render a code node as HTML."""
-    # Escape HTML in code content
-    escaped_content = html.escape(node.content)
+    # Get content from children
+    if node.children and isinstance(node.children[0], TextNode):
+        content = node.children[0].text
+    else:
+        content = ""
 
-    language = node.language or ""
+    # Escape HTML in code content
+    escaped_content = html.escape(content)
+
+    # Try to get language from meta
+    language = node.meta.get("language", "") if node.meta else ""
     language_class = f" class=\"language-{language}\"" if language else ""
 
     return (
@@ -183,14 +193,24 @@ def _render_code(node: CodeNode, depth: int) -> str:
     )
 
 
-def _render_table(node: TableNode, depth: int) -> str:
+def _render_table(node: BlockNode, depth: int) -> str:
     """Render a table node as HTML."""
     result = "<table class=\"nomenic-table\">\n"
 
-    # Determine if first row should be a header
-    has_header = len(node.rows) > 0
+    # Get rows from children
+    rows = []
+    for child in node.children:
+        if isinstance(child, TextNode):
+            # Split by pipes
+            cells = [cell.strip() for cell in child.text.split('|')]
+            # Filter out empty cells (e.g., from leading/trailing pipes)
+            cells = [cell for cell in cells if cell]
+            rows.append(cells)
 
-    for i, row in enumerate(node.rows):
+    # Determine if first row should be a header
+    has_header = len(rows) > 0
+
+    for i, row in enumerate(rows):
         if i == 0 and has_header:
             result += "<thead>\n<tr>\n"
             for cell in row:
