@@ -2,9 +2,12 @@
 
 import sys
 import argparse
+import json
 from pathlib import Path
 from typing import List, Optional
-import json
+
+# Import core components at the module level
+from .. import Lexer, Parser
 
 
 def main(args: Optional[List[str]] = None) -> int:
@@ -244,10 +247,6 @@ def handle_debug(args: argparse.Namespace) -> int:
 
 def handle_validate(args: argparse.Namespace) -> int:
     """Handle the validate command."""
-    from pathlib import Path
-    import sys
-    import json
-
     try:
         # Read the file
         file_path = Path(args.file)
@@ -255,9 +254,6 @@ def handle_validate(args: argparse.Namespace) -> int:
             content = f.read()
 
         # Parse and validate the document
-        from ..lexer import Lexer
-        from ..parser import Parser
-
         lexer = Lexer(content)
         tokens = list(lexer.tokenize())
         parser = Parser(tokens, strict=args.strict)
@@ -329,9 +325,6 @@ def handle_validate(args: argparse.Namespace) -> int:
 
 def handle_render(args: argparse.Namespace) -> int:
     """Handle the render command."""
-    from pathlib import Path
-    import sys
-
     try:
         # Read the file
         file_path = Path(args.file)

@@ -1,8 +1,10 @@
 """HTML renderer for Nomenic documents."""
 
 import html
+import re
 from typing import Any, Dict, List, Optional, Union
 
+from .. import Lexer, Parser
 from ..ast import (
     BlockNode,
     CodeNode,
@@ -14,8 +16,6 @@ from ..ast import (
     TableNode,
     TextNode,
 )
-from ..parser import Parser
-from ..lexer import Lexer
 
 
 def render_html(
@@ -231,9 +231,6 @@ def _process_inline_formatting(text: str) -> str:
     # For now, we'll use basic replacements for demonstration
 
     # Replace code first (to avoid formatting within code)
-    import re
-
-    # Code
     text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
 
     # Bold
