@@ -206,12 +206,12 @@ def _setup_lint_parser(parser: argparse.ArgumentParser) -> None:
 def handle_debug(args: argparse.Namespace) -> int:
     """Handle the debug command."""
     from ..debug.core import debug
-    from ..debug.file_utils import read_file_content
+    from ..debug.file_utils import read_file
 
     try:
         # Read the file
         file_path = Path(args.file)
-        content = read_file_content(file_path)
+        content = read_file(file_path)
 
         # Determine which filter to use based on mode
         filter_arg = {}
