@@ -84,6 +84,40 @@ for node in ast.children:
     print(f"Node type: {node.type}")
 ```
 
+### CLI Usage
+
+Nomenic Core includes a command-line interface (CLI) for working with Nomenic documents.
+
+```bash
+# Install the package with CLI support
+python -m pip install -e .
+
+# Show CLI help
+nomenic --help
+
+# Debug and inspect a document
+nomenic debug path/to/document.nmc
+
+# Validate a document
+nomenic validate path/to/document.nmc
+
+# Render a document to HTML
+nomenic render path/to/document.nmc --format html
+
+# Render to HTML and save to file
+nomenic render path/to/document.nmc --format html --output output.html
+```
+
+If the CLI is not in your PATH, you can run it directly using:
+
+```bash
+# Run from project root
+python src/nomenic_cli.py --help
+
+# Or as a module
+python -m nomenic.cli.main --help
+```
+
 ### Requirements
 
 - Python 3.9+

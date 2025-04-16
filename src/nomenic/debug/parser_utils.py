@@ -1,10 +1,22 @@
 """Parser error analysis and debugging utilities for Nomenic."""
 
+import sys
 from typing import Dict, List, Optional, Tuple, Union
 
-from ..lexer import tokenize
-from ..parser import Parser
-from ..tokens import Token
+# Try absolute imports first (recommended approach)
+try:
+    from nomenic.lexer import tokenize
+    from nomenic.parser import Parser
+    from nomenic.tokens import Token
+except ImportError:
+    # Fall back to relative imports if absolute imports fail
+    try:
+        from ..lexer import tokenize
+        from ..parser import Parser
+        from ..tokens import Token
+    except ImportError:
+        print("ERROR: Failed to import Nomenic core components. Please make sure the package is properly installed.")
+        sys.exit(1)
 
 
 def analyze_errors(

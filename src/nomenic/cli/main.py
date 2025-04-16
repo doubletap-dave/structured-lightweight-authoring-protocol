@@ -6,8 +6,16 @@ import json
 from pathlib import Path
 from typing import List, Optional
 
-# Import core components at the module level
-from .. import Lexer, Parser
+# Try absolute imports first (recommended approach)
+try:
+    from nomenic import Lexer, Parser
+except ImportError:
+    # Fall back to relative imports if absolute imports fail
+    try:
+        from .. import Lexer, Parser
+    except ImportError:
+        print("ERROR: Failed to import Nomenic core components. Please make sure the package is properly installed.")
+        sys.exit(1)
 
 
 def main(args: Optional[List[str]] = None) -> int:
@@ -205,8 +213,8 @@ def _setup_lint_parser(parser: argparse.ArgumentParser) -> None:
 
 def handle_debug(args: argparse.Namespace) -> int:
     """Handle the debug command."""
-    from ..debug.core import debug
-    from ..debug.file_utils import read_file
+    from nomenic.debug.core import debug
+    from nomenic.debug.file_utils import read_file
 
     try:
         # Read the file
@@ -256,7 +264,9 @@ def handle_validate(args: argparse.Namespace) -> int:
         # Parse and validate the document
         lexer = Lexer(content)
         tokens = list(lexer.tokenize())
-        parser = Parser(tokens, strict=args.strict)
+        parser = Parser(tokens)
+        if args.strict:
+            parser.set_strict_mode(True)
         document = parser.parse()
 
         # Perform additional validation if needed
@@ -283,12 +293,18 @@ def handle_validate(args: argparse.Namespace) -> int:
                 })
 
             # Add validation errors
-            for error in validation_errors:
-                result["errors"].append({
+            for msg, token in validation_errors:
+                error_info = {
                     "type": "validation",
-                    "message": error["message"],
-                    "context": error.get("context", "")
-                })
+                    "message": msg
+                }
+                if token:  # Token might be None for document-level errors
+                    error_info.update({
+                        "line": token.line,
+                        "column": token.column,
+                        "token": token.content
+                    })
+                result["errors"].append(error_info)
 
             print(json.dumps(result, indent=2))
         else:
@@ -307,10 +323,11 @@ def handle_validate(args: argparse.Namespace) -> int:
 
                 if validation_errors:
                     print(f"\nValidation errors ({len(validation_errors)}):")
-                    for i, error in enumerate(validation_errors):
-                        print(f"  {i+1}. {error['message']}")
-                        if 'context' in error:
-                            print(f"     Context: {error['context']}")
+                    for i, (msg, token) in enumerate(validation_errors):
+                        if token:
+                            print(f"  {i+1}. Line {token.line}, Column {token.column}: {msg}")
+                        else:
+                            print(f"  {i+1}. {msg}")
 
                 return 1
 
@@ -333,7 +350,7 @@ def handle_render(args: argparse.Namespace) -> int:
 
         # Determine output format
         if args.format == "html":
-            from ..renderers.html import render_html
+            from nomenic.renderers.html import render_html
             output = render_html(
                 content,
                 theme=args.theme,

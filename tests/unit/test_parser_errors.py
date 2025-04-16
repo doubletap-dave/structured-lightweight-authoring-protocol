@@ -1,6 +1,7 @@
 """Tests for the Nomenic Core parser error handling."""
 
 import pytest
+
 from nomenic.errors import ParserError
 from nomenic.lexer import tokenize
 from nomenic.parser import Parser, parse

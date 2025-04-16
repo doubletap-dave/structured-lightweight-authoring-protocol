@@ -1,10 +1,21 @@
 """Style token inspection and analysis utilities for Nomenic debug module."""
 
 import re
+import sys
 from typing import Dict, List, Optional, Union
 
-from ..lexer import Lexer
-from ..tokens import TokenType
+# Try absolute imports first (recommended approach)
+try:
+    from nomenic.lexer import Lexer
+    from nomenic.tokens import TokenType
+except ImportError:
+    # Fall back to relative imports if absolute imports fail
+    try:
+        from ..lexer import Lexer
+        from ..tokens import TokenType
+    except ImportError:
+        print("ERROR: Failed to import Nomenic core components. Please make sure the package is properly installed.")
+        sys.exit(1)
 
 
 def analyze_styles(

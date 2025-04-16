@@ -2,17 +2,35 @@
 
 import html
 import re
+import sys
 from typing import Any, Dict, List, Optional, Union
 
-from .. import Lexer, Parser
-from ..ast import (
-    ASTNode,
-    BlockNode,
-    DocumentNode,
-    HeaderNode,
-    ListNode,
-    TextNode,
-)
+# Try absolute imports first (recommended approach)
+try:
+    from nomenic import Lexer, Parser
+    from nomenic.ast import (
+        ASTNode,
+        BlockNode,
+        DocumentNode,
+        HeaderNode,
+        ListNode,
+        TextNode,
+    )
+except ImportError:
+    # Fall back to relative imports if absolute imports fail
+    try:
+        from .. import Lexer, Parser
+        from ..ast import (
+            ASTNode,
+            BlockNode,
+            DocumentNode,
+            HeaderNode,
+            ListNode,
+            TextNode,
+        )
+    except ImportError:
+        print("ERROR: Failed to import Nomenic core components. Please make sure the package is properly installed.")
+        sys.exit(1)
 
 
 def render_html(

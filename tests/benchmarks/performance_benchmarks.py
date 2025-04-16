@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+
 from nomenic.lexer import tokenize
 from nomenic.parser import parse
 

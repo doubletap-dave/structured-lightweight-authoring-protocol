@@ -30,7 +30,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "nomenic=nomenic.cli:main",
+            "nomenic=nomenic.cli.main:main",
         ],
     },
     classifiers=[

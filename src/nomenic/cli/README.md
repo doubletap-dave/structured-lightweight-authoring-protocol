@@ -16,6 +16,36 @@ For enhanced output formatting with some commands, install the optional dependen
 pip install nomenic[cli]
 ```
 
+### Development Installation
+
+If you're developing Nomenic, you can install it in development mode:
+
+```bash
+# From the project root
+pip install -e .
+```
+
+### Troubleshooting Installation
+
+If you encounter issues with the CLI entry point not being found, you can run the CLI in several alternative ways:
+
+```bash
+# Run using the wrapper script (from project root)
+python src/nomenic_cli.py --help
+
+# Run as a module
+python -m nomenic.cli.main --help
+
+# Run using the installation helper
+python -m nomenic.cli.install
+```
+
+If you're experiencing import issues, the CLI includes fallback mechanisms that should handle both absolute and relative imports. If problems persist, please check:
+
+1. Ensure your Python environment is correctly set up
+2. Make sure the package is properly installed
+3. Verify that the entry point is in your PATH
+
 ## Commands
 
 ### Debug

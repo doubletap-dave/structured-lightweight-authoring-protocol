@@ -5,12 +5,18 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Union
 
-from src.nomenic.lexer import Lexer
-from src.nomenic.tokens import TOKEN_MAP, TokenType
-
-# Import from parent package
-sys.path.insert(0, os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../..")))
+# Try absolute imports first (recommended approach)
+try:
+    from nomenic.lexer import Lexer, tokenize
+    from nomenic.tokens import TOKEN_MAP, TokenType, Token
+except ImportError:
+    # Fall back to relative imports if absolute imports fail
+    try:
+        from ..lexer import Lexer, tokenize
+        from ..tokens import TOKEN_MAP, TokenType, Token
+    except ImportError:
+        print("ERROR: Failed to import Nomenic core components. Please make sure the package is properly installed.")
+        sys.exit(1)
 
 
 def analyze_tokens(
@@ -93,7 +99,16 @@ def visualize_ast(content: str, **kwargs) -> Dict[str, any]:
     Returns:
         Dictionary with visualization information
     """
-    from ..parser import Parser
+    # Try absolute imports first (recommended approach)
+    try:
+        from nomenic.parser import Parser
+    except ImportError:
+        # Fall back to relative imports if absolute imports fail
+        try:
+            from ..parser import Parser
+        except ImportError:
+            print("ERROR: Failed to import Parser. Please make sure the package is properly installed.")
+            sys.exit(1)
 
     # Tokenize the content
     tokens = tokenize(content)
@@ -106,7 +121,7 @@ def visualize_ast(content: str, **kwargs) -> Dict[str, any]:
     # This is a placeholder that returns a basic representation
     return {
         "document_type": "Nomenic",
-        "block_count": len(document.blocks) if hasattr(document, "blocks") else 0,
+        "block_count": len(document.children) if hasattr(document, "children") else 0,
         "has_errors": len(parser.errors) > 0,
         "error_count": len(parser.errors),
     }
