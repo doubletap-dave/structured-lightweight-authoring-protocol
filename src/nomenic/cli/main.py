@@ -159,6 +159,18 @@ def _setup_render_parser(parser: argparse.ArgumentParser) -> None:
         type=str,
         help="Theme for HTML output"
     )
+    parser.add_argument(
+        "--pretty",
+        action="store_true",
+        default=True,
+        help="Generate pretty (indented) JSON/YAML output (default: True)"
+    )
+    parser.add_argument(
+        "--include-frontmatter",
+        action="store_true",
+        default=True,
+        help="Include metadata as frontmatter in Markdown output (default: True)"
+    )
     parser.set_defaults(func=handle_render)
 
 
@@ -213,43 +225,29 @@ def _setup_lint_parser(parser: argparse.ArgumentParser) -> None:
 
 def handle_debug(args: argparse.Namespace) -> int:
     """Handle the debug command."""
-    from nomenic.debug.core import debug
-    from nomenic.debug.file_utils import read_file
-
     try:
+        from nomenic.debug import debug
+
         # Read the file
         file_path = Path(args.file)
-        content = read_file(file_path)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
 
-        # Determine which filter to use based on mode
-        filter_arg = {}
-        if args.filter:
-            if args.mode == "tokens":
-                filter_arg["token_type"] = args.filter
-            elif args.mode == "errors":
-                filter_arg["error_category"] = args.filter
-            elif args.mode == "styles":
-                filter_arg["style_type"] = args.filter
-
-        # Run debug with appropriate arguments
-        output = debug(
-            content=content,
+        # Debug the content
+        result = debug(
+            content,
             mode=args.mode,
-            output_format=args.format,
-            **filter_arg
+            format=args.format,
+            filter=args.filter
         )
 
-        # Print the output
-        print(output)
+        print(result)
         return 0
     except FileNotFoundError:
         print(f"Error: File not found: {args.file}", file=sys.stderr)
         return 1
-    except ValueError as e:
-        print(f"Error: {e}", file=sys.stderr)
-        return 1
     except Exception as e:
-        print(f"Unexpected error: {e}", file=sys.stderr)
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -261,42 +259,32 @@ def handle_validate(args: argparse.Namespace) -> int:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # Parse and validate the document
+        # Tokenize and parse the content
         lexer = Lexer(content)
         tokens = list(lexer.tokenize())
         parser = Parser(tokens)
-        if args.strict:
-            parser.set_strict_mode(True)
         document = parser.parse()
 
-        # Perform additional validation if needed
-        validation_errors = parser.validate_document(document)
+        # Validate the document
+        validation_errors = []
+        if args.strict:
+            # Add strict validation rules
+            # TODO: Implement strict validation
+            pass
 
-        # Format and display results
+        # Output results
         if args.format == "json":
             result = {
                 "valid": len(parser.errors) == 0 and len(validation_errors) == 0,
-                "lexer_errors": 0,
-                "parser_errors": len(parser.errors),
-                "validation_errors": len(validation_errors),
+                "file": str(file_path),
                 "errors": []
             }
 
             # Add parser errors
             for msg, token in parser.errors:
-                result["errors"].append({
-                    "type": "parser",
-                    "message": msg,
-                    "line": token.line,
-                    "column": token.column,
-                    "token": token.content
-                })
-
-            # Add validation errors
-            for msg, token in validation_errors:
                 error_info = {
-                    "type": "validation",
-                    "message": msg
+                    "message": msg,
+                    "type": "parser"
                 }
                 if token:  # Token might be None for document-level errors
                     error_info.update({
@@ -357,9 +345,28 @@ def handle_render(args: argparse.Namespace) -> int:
                 include_styles=True,
                 include_meta=True
             )
+        elif args.format == "md":
+            from nomenic.renderers.markdown import render_markdown
+            output = render_markdown(
+                content,
+                include_frontmatter=args.include_frontmatter
+            )
+        elif args.format == "yaml":
+            from nomenic.renderers.yaml import render_yaml
+            output = render_yaml(
+                content,
+                include_content=True
+            )
+        elif args.format == "json":
+            from nomenic.renderers.json import render_json
+            output = render_json(
+                content,
+                pretty=args.pretty,
+                include_content=True
+            )
         else:
             print(
-                f"Output format '{args.format}' not yet implemented", file=sys.stderr)
+                f"Output format '{args.format}' not supported", file=sys.stderr)
             return 1
 
         # Determine output destination
@@ -381,9 +388,131 @@ def handle_render(args: argparse.Namespace) -> int:
 
 def handle_convert(args: argparse.Namespace) -> int:
     """Handle the convert command."""
-    # Placeholder for future implementation
-    print("Convert command not yet implemented")
-    return 1
+    try:
+        # Read the file
+        file_path = Path(args.file)
+        
+        # Determine source format
+        from_format = args.from_format
+        if not from_format:
+            # Auto-detect from file extension
+            from_format = file_path.suffix.lstrip('.')
+            if from_format == 'nmc':
+                from_format = 'nmc'
+            elif from_format in ('md', 'markdown'):
+                from_format = 'md'
+            elif from_format in ('yml', 'yaml'):
+                from_format = 'yaml'
+            elif from_format == 'json':
+                from_format = 'json'
+            else:
+                print(f"Unable to determine source format from file extension: {file_path.suffix}", file=sys.stderr)
+                return 1
+        
+        # Read the file content
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Get appropriate converter based on source and target formats
+        try:
+            if from_format == 'nmc':
+                # NMC to target format
+                if args.to_format == 'md':
+                    from nomenic.converters import MarkdownConverter
+                    converter = MarkdownConverter()
+                    output = converter.from_nomenic(content, include_frontmatter=True)
+                elif args.to_format == 'yaml':
+                    from nomenic.converters import YAMLConverter
+                    converter = YAMLConverter()
+                    output = converter.from_nomenic(content, include_content=True)
+                elif args.to_format == 'json':
+                    from nomenic.converters import JSONConverter
+                    converter = JSONConverter()
+                    output = converter.from_nomenic(content, pretty=True, include_content=True)
+                else:
+                    print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
+                    return 1
+            else:
+                # Source format to NMC
+                if from_format == 'md':
+                    from nomenic.converters import MarkdownConverter
+                    converter = MarkdownConverter()
+                    if args.to_format == 'nmc':
+                        output = converter.to_nomenic(content, include_metadata=True)
+                    else:
+                        # Convert to NMC first, then to target format
+                        nmc_content = converter.to_nomenic(content, include_metadata=True)
+                        if args.to_format == 'json':
+                            from nomenic.converters import JSONConverter
+                            json_converter = JSONConverter()
+                            output = json_converter.from_nomenic(nmc_content, pretty=True, include_content=True)
+                        elif args.to_format == 'yaml':
+                            from nomenic.converters import YAMLConverter
+                            yaml_converter = YAMLConverter()
+                            output = yaml_converter.from_nomenic(nmc_content, include_content=True)
+                        else:
+                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
+                            return 1
+                elif from_format == 'json':
+                    from nomenic.converters import JSONConverter
+                    converter = JSONConverter()
+                    if args.to_format == 'nmc':
+                        output = converter.to_nomenic(content, include_metadata=True)
+                    else:
+                        # Convert to NMC first, then to target format
+                        nmc_content = converter.to_nomenic(content, include_metadata=True)
+                        if args.to_format == 'md':
+                            from nomenic.converters import MarkdownConverter
+                            md_converter = MarkdownConverter()
+                            output = md_converter.from_nomenic(nmc_content, include_frontmatter=True)
+                        elif args.to_format == 'yaml':
+                            from nomenic.converters import YAMLConverter
+                            yaml_converter = YAMLConverter()
+                            output = yaml_converter.from_nomenic(nmc_content, include_content=True)
+                        else:
+                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
+                            return 1
+                elif from_format == 'yaml':
+                    from nomenic.converters import YAMLConverter
+                    converter = YAMLConverter()
+                    if args.to_format == 'nmc':
+                        output = converter.to_nomenic(content, include_metadata=True)
+                    else:
+                        # Convert to NMC first, then to target format
+                        nmc_content = converter.to_nomenic(content, include_metadata=True)
+                        if args.to_format == 'md':
+                            from nomenic.converters import MarkdownConverter
+                            md_converter = MarkdownConverter()
+                            output = md_converter.from_nomenic(nmc_content, include_frontmatter=True)
+                        elif args.to_format == 'json':
+                            from nomenic.converters import JSONConverter
+                            json_converter = JSONConverter()
+                            output = json_converter.from_nomenic(nmc_content, pretty=True, include_content=True)
+                        else:
+                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
+                            return 1
+                else:
+                    print(f"Conversion from {from_format} not yet implemented", file=sys.stderr)
+                    return 1
+        except ImportError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            return 1
+        
+        # Output the result
+        if args.output:
+            output_path = Path(args.output)
+            output_path.write_text(output, encoding='utf-8')
+            print(f"Conversion output written to {output_path}")
+        else:
+            print(output)
+            
+        return 0
+    except FileNotFoundError:
+        print(f"Error: File not found: {args.file}", file=sys.stderr)
+        return 1
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
 
 
 def handle_lint(args: argparse.Namespace) -> int:
