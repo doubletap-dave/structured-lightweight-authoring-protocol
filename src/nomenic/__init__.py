@@ -1,17 +1,26 @@
-# Nomenic Core - Main Package
+"""Nomenic Document Language Parser and Toolkit.
+
+This package provides tools for working with Nomenic Document Language (NDL) files.
+"""
+
+from .lexer import Lexer, tokenize
+from .parser import Parser
+from .ast import (
+    Node, DocumentNode, MetaNode, HeaderNode,
+    TextNode, ListNode, CodeNode, TableNode
+)
+
+# For CLI access
+try:
+    from .cli import main as cli_main
+except ImportError:
+    # CLI functionality might not be available in all environments
+    pass
 
 __version__ = "0.1.0"
 
-from .errors import LexerError, NomenicError, ParserError
-from .lexer import Lexer, tokenize
-from .tokens import Token, TokenType
-
 __all__ = [
-    "Lexer",
-    "LexerError",
-    "NomenicError",
-    "ParserError",
-    "Token",
-    "TokenType",
-    "tokenize",
+    "Lexer", "tokenize", "Parser",
+    "Node", "DocumentNode", "MetaNode", "HeaderNode",
+    "TextNode", "ListNode", "CodeNode", "TableNode",
 ]

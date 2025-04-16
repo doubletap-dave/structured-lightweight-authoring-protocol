@@ -1,0 +1,50 @@
+meta:
+  title=Nomenic Demo Document
+  author=Nomenic Team
+  date=2025-04-14
+  version=1.0.0
+
+header: Nomenic Document Language
+  text: Nomenic is a structured document format designed for both human readability and machine parsing. It bridges the gap between Markdown's simplicity and YAML's structure.
+
+header: Key Features
+  list:
+    - **Explicit Structure**: Clear token markers for header, text, list, etc.
+    - **Uniform Syntax**: Consistent patterns with minimal special cases
+    - **Extensible**: Support for custom directives and metadata
+    - **Human Readable**: Designed for easy authoring and reading
+
+header: Document Blocks
+  text: Nomenic documents are composed of various block types that define the document structure.
+
+header: Example Code
+  code:
+    # Python example
+    def process_document(content):
+        """Process a Nomenic document."""
+        lexer = Lexer(content)
+        tokens = lexer.tokenize()
+        parser = Parser(tokens)
+        doc = parser.parse()
+        return doc
+
+header: Comparison Table
+  table:
+    - Feature | Markdown | YAML | Nomenic
+    - Readability | High | Medium | High
+    - Structure | Low | High | High
+    - Learning Curve | Low | Medium | Low
+    - Metadata Support | Limited | Extensive | Extensive
+    - Semantic Meaning | Limited | Medium | High
+
+header: Getting Started
+  text: To get started with Nomenic, install the package and create your first document:
+  code:
+    pip install nomenic
+    nomenic --help
+
+header: Links and References
+  list:
+    - [Project Repository](https://github.com/nomenic/nomenic-core)
+    - [Documentation](https://nomenic.org/docs)
+    - [Specification](https://nomenic.org/spec) 
