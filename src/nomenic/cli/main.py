@@ -313,7 +313,8 @@ def handle_validate(args: argparse.Namespace) -> int:
                     print(f"\nValidation errors ({len(validation_errors)}):")
                     for i, (msg, token) in enumerate(validation_errors):
                         if token:
-                            print(f"  {i+1}. Line {token.line}, Column {token.column}: {msg}")
+                            print(
+                                f"  {i+1}. Line {token.line}, Column {token.column}: {msg}")
                         else:
                             print(f"  {i+1}. {msg}")
 
@@ -389,123 +390,63 @@ def handle_render(args: argparse.Namespace) -> int:
 def handle_convert(args: argparse.Namespace) -> int:
     """Handle the convert command."""
     try:
-        # Read the file
+        from nomenic.converters import MarkdownConverter, YAMLConverter, JSONConverter
+
+        # Read the input file
         file_path = Path(args.file)
-        
-        # Determine source format
-        from_format = args.from_format
-        if not from_format:
-            # Auto-detect from file extension
-            from_format = file_path.suffix.lstrip('.')
-            if from_format == 'nmc':
-                from_format = 'nmc'
-            elif from_format in ('md', 'markdown'):
-                from_format = 'md'
-            elif from_format in ('yml', 'yaml'):
-                from_format = 'yaml'
-            elif from_format == 'json':
-                from_format = 'json'
-            else:
-                print(f"Unable to determine source format from file extension: {file_path.suffix}", file=sys.stderr)
-                return 1
-        
-        # Read the file content
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
-        # Get appropriate converter based on source and target formats
-        try:
-            if from_format == 'nmc':
-                # NMC to target format
-                if args.to_format == 'md':
-                    from nomenic.converters import MarkdownConverter
-                    converter = MarkdownConverter()
-                    output = converter.from_nomenic(content, include_frontmatter=True)
-                elif args.to_format == 'yaml':
-                    from nomenic.converters import YAMLConverter
-                    converter = YAMLConverter()
-                    output = converter.from_nomenic(content, include_content=True)
-                elif args.to_format == 'json':
-                    from nomenic.converters import JSONConverter
-                    converter = JSONConverter()
-                    output = converter.from_nomenic(content, pretty=True, include_content=True)
-                else:
-                    print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
-                    return 1
+
+        # Determine source format if not specified
+        from_format = args.from_format
+        if not from_format:
+            # Try to detect from file extension
+            ext = file_path.suffix.lower()
+            if ext == '.md':
+                from_format = 'md'
+            elif ext == '.yaml' or ext == '.yml':
+                from_format = 'yaml'
+            elif ext == '.json':
+                from_format = 'json'
+            elif ext == '.nmc':
+                from_format = 'nmc'
             else:
-                # Source format to NMC
-                if from_format == 'md':
-                    from nomenic.converters import MarkdownConverter
-                    converter = MarkdownConverter()
-                    if args.to_format == 'nmc':
-                        output = converter.to_nomenic(content, include_metadata=True)
-                    else:
-                        # Convert to NMC first, then to target format
-                        nmc_content = converter.to_nomenic(content, include_metadata=True)
-                        if args.to_format == 'json':
-                            from nomenic.converters import JSONConverter
-                            json_converter = JSONConverter()
-                            output = json_converter.from_nomenic(nmc_content, pretty=True, include_content=True)
-                        elif args.to_format == 'yaml':
-                            from nomenic.converters import YAMLConverter
-                            yaml_converter = YAMLConverter()
-                            output = yaml_converter.from_nomenic(nmc_content, include_content=True)
-                        else:
-                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
-                            return 1
-                elif from_format == 'json':
-                    from nomenic.converters import JSONConverter
-                    converter = JSONConverter()
-                    if args.to_format == 'nmc':
-                        output = converter.to_nomenic(content, include_metadata=True)
-                    else:
-                        # Convert to NMC first, then to target format
-                        nmc_content = converter.to_nomenic(content, include_metadata=True)
-                        if args.to_format == 'md':
-                            from nomenic.converters import MarkdownConverter
-                            md_converter = MarkdownConverter()
-                            output = md_converter.from_nomenic(nmc_content, include_frontmatter=True)
-                        elif args.to_format == 'yaml':
-                            from nomenic.converters import YAMLConverter
-                            yaml_converter = YAMLConverter()
-                            output = yaml_converter.from_nomenic(nmc_content, include_content=True)
-                        else:
-                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
-                            return 1
-                elif from_format == 'yaml':
-                    from nomenic.converters import YAMLConverter
-                    converter = YAMLConverter()
-                    if args.to_format == 'nmc':
-                        output = converter.to_nomenic(content, include_metadata=True)
-                    else:
-                        # Convert to NMC first, then to target format
-                        nmc_content = converter.to_nomenic(content, include_metadata=True)
-                        if args.to_format == 'md':
-                            from nomenic.converters import MarkdownConverter
-                            md_converter = MarkdownConverter()
-                            output = md_converter.from_nomenic(nmc_content, include_frontmatter=True)
-                        elif args.to_format == 'json':
-                            from nomenic.converters import JSONConverter
-                            json_converter = JSONConverter()
-                            output = json_converter.from_nomenic(nmc_content, pretty=True, include_content=True)
-                        else:
-                            print(f"Conversion to {args.to_format} not yet implemented", file=sys.stderr)
-                            return 1
+                # Try to detect from content
+                if content.startswith('---\n') and '\n---\n' in content:
+                    from_format = 'yaml'
+                elif content.startswith('{'):
+                    from_format = 'json'
+                elif any(marker in content for marker in ['# ', '## ', '### ']):
+                    from_format = 'md'
                 else:
-                    print(f"Conversion from {from_format} not yet implemented", file=sys.stderr)
-                    return 1
-        except ImportError as e:
-            print(f"Error: {e}", file=sys.stderr)
-            return 1
-        
-        # Output the result
+                    from_format = 'nmc'  # Default to Nomenic format
+
+        # Create appropriate converter
+        if args.to_format == 'md':
+            converter = MarkdownConverter()
+        elif args.to_format == 'yaml':
+            converter = YAMLConverter()
+        elif args.to_format == 'json':
+            converter = JSONConverter()
+        else:
+            raise ValueError(f"Unsupported target format: {args.to_format}")
+
+        # Perform conversion
+        if from_format == 'nmc':
+            # Convert from Nomenic to target format
+            result = converter.from_nomenic(content)
+        else:
+            # Convert from source format to Nomenic
+            result = converter.to_nomenic(content)
+
+        # Write output
         if args.output:
             output_path = Path(args.output)
-            output_path.write_text(output, encoding='utf-8')
-            print(f"Conversion output written to {output_path}")
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(result)
         else:
-            print(output)
-            
+            print(result)
+
         return 0
     except FileNotFoundError:
         print(f"Error: File not found: {args.file}", file=sys.stderr)

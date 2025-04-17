@@ -14,6 +14,8 @@ class Visitor(Protocol):
     def visit_header(self, node: "HeaderNode") -> Any: ...
     def visit_text(self, node: "TextNode") -> Any: ...
     def visit_list(self, node: "ListNode") -> Any: ...
+    def visit_list_item(self, node: "ListItemNode") -> Any: ...
+    def visit_code(self, node: "CodeNode") -> Any: ...
     def visit_block(self, node: "BlockNode") -> Any: ...
 
 
@@ -214,7 +216,7 @@ class ListNode(ASTNode):
     """
 
     ordered: bool = False
-    items: list["ASTNode"] = field(default_factory=list)
+    items: list["ListItemNode"] = field(default_factory=list)
 
     def normalize(self) -> "ListNode":
         """Normalize list items."""
@@ -228,6 +230,40 @@ class ListNode(ASTNode):
         super().optimize()
         # Also optimize items list
         self.items = [item.optimize() for item in self.items]
+        return self
+
+
+@dataclass
+class ListItemNode(ASTNode):
+    """
+    Node representing a list item.
+    """
+
+    def normalize(self) -> "ListItemNode":
+        """Normalize list item."""
+        super().normalize()
+        return self
+
+    def optimize(self) -> "ListItemNode":
+        """Optimize list item."""
+        super().optimize()
+        return self
+
+
+@dataclass
+class CodeNode(ASTNode):
+    """
+    Node representing a code block.
+    """
+
+    def normalize(self) -> "CodeNode":
+        """Normalize code block."""
+        super().normalize()
+        return self
+
+    def optimize(self) -> "CodeNode":
+        """Optimize code block."""
+        super().optimize()
         return self
 
 

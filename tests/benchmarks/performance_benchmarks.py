@@ -27,11 +27,9 @@ BENCHMARK_DIR = Path(__file__).parent / "benchmark_data"
 
 # Helper functions
 def generate_random_text(length: int) -> str:
-    """Generate random text of specified length."""
-    return "".join(
-        random.choice(string.ascii_letters + string.digits + " \n\t.,!?")
-        for _ in range(length)
-    )
+    """Generate random text of specified length without whitespace characters."""
+    allowed = string.ascii_letters + string.digits + ".,!?"  # exclude spaces, tabs, newlines
+    return "".join(random.choice(allowed) for _ in range(length))
 
 
 def generate_nomenic_doc(size: int) -> str:
@@ -83,17 +81,13 @@ def ensure_benchmark_dir() -> None:
 
 
 def get_or_create_benchmark_file(size: int) -> str:
-    """Get the content of a benchmark file or create it if it doesn't exist."""
+    """Generate and return the content of a benchmark file."""
     ensure_benchmark_dir()
     file_path = BENCHMARK_DIR / f"benchmark_{size}.nmc"
-
-    if not file_path.exists():
-        print(f"Generating benchmark file: {file_path}")
-        content = generate_nomenic_doc(size)
-        file_path.write_text(content)
-        return content
-
-    return file_path.read_text()
+    print(f"Generating benchmark file: {file_path}")
+    content = generate_nomenic_doc(size)
+    file_path.write_text(content)
+    return content
 
 
 # Benchmarks

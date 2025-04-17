@@ -4,7 +4,7 @@ meta:
   date=2025-04-14
   version=1.0.0
 
-header: Nomenic Document Language
+### @i(header): Nomenic Document Language
   text: Nomenic is a structured document format designed for both human readability and machine parsing. It bridges the gap between Markdown's simplicity and YAML's structure.
 
 header: Key Features
