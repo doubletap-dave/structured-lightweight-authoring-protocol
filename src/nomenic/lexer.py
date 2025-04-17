@@ -18,6 +18,22 @@ class Lexer:
     can use to build the AST.
     """
 
+    # Regular expression patterns (compile once at class level)
+    re_indentation = re.compile(r"^(\s+)")
+    re_block_token_key = r"[a-zA-Z0-9_-]+"
+    re_block_token = re.compile(rf"^({re_block_token_key}):\s*")
+    re_list_item = re.compile(r"^-\s+")
+    re_ordered_list_item = re.compile(r"^(\d+|[a-zA-Z])\.(\s+)")
+    re_custom_directive = re.compile(rf"^x-({re_block_token_key}):\s*")
+    re_callout = re.compile(r"^(note|warn|tip):\s*")
+    re_inline_annotation_paren = re.compile(r"\([^)]*\)")
+    re_inline_annotation_bracket = re.compile(r"\[[^\]]*\]")
+    re_inline_key_value = re.compile(r"\{[^}]*\}")
+    re_style_bold = re.compile(r"@b\(([^)]*)\)|@bold\(([^)]*)\)")
+    re_style_italic = re.compile(r"@i\(([^)]*)\)|@italic\(([^)]*)\)")
+    re_style_code = re.compile(r"@c\(([^)]*)\)|@code\(([^)]*)\)")
+    re_style_link = re.compile(r"@l\(([^)]*)\)|@link\(([^)]*)\)")
+
     def __init__(self, content: str):
         """
         Initialize the lexer with Nomenic content.
@@ -30,27 +46,6 @@ class Lexer:
         self.line_idx = 0  # Current line (0-indexed)
         self.col_idx = 0  # Current column (0-indexed)
         self.current_line = self.lines[0] if self.lines else ""
-
-        # Regular expression patterns
-        self.re_indentation = re.compile(r"^(\s+)")
-        # Stricter block token key: Allow letters, numbers, underscore, hyphen
-        self.re_block_token_key = r"[a-zA-Z0-9_-]+"  # nosec B105
-        # Make whitespace after colon optional by changing \s+ to \s*
-        self.re_block_token = re.compile(rf"^({self.re_block_token_key}):\s*")
-        self.re_list_item = re.compile(r"^-\s+")
-        # Stricter list marker: Allow numbers or single letters
-        self.re_ordered_list_item = re.compile(r"^(\d+|[a-zA-Z])\.(\s+)")
-        # Stricter custom directive key - also make whitespace optional
-        self.re_custom_directive = re.compile(rf"^x-({self.re_block_token_key}):\s*")
-        # Make whitespace optional for callouts too
-        self.re_callout = re.compile(r"^(note|warn|tip):\s*")
-        self.re_inline_annotation_paren = re.compile(r"\([^)]*\)")
-        self.re_inline_annotation_bracket = re.compile(r"\[[^\]]*\]")
-        self.re_inline_key_value = re.compile(r"\{[^}]*\}")
-        self.re_style_bold = re.compile(r"@b\(([^)]*)\)|@bold\(([^)]*)\)")
-        self.re_style_italic = re.compile(r"@i\(([^)]*)\)|@italic\(([^)]*)\)")
-        self.re_style_code = re.compile(r"@c\(([^)]*)\)|@code\(([^)]*)\)")
-        self.re_style_link = re.compile(r"@l\(([^)]*)\)|@link\(([^)]*)\)")
 
     def tokenize(self) -> list[Token]:
         """
@@ -372,6 +367,7 @@ class Lexer:
                     callout_match = self.re_callout.match(remaining_line)
 
                     if custom_directive_match:
+                        processed_start = True
                         directive_name = custom_directive_match.group(1)
                         token_str = f"x-{directive_name}:"
                         match_len = len(custom_directive_match.group(0))
@@ -398,6 +394,7 @@ class Lexer:
                         return  # Processed indented custom directive
 
                     elif callout_match:
+                        processed_start = True
                         callout_type = callout_match.group(1)
                         token_str = f"{callout_type}:"
                         match_len = len(callout_match.group(0))
@@ -428,6 +425,7 @@ class Lexer:
             ordered_list_match = self.re_ordered_list_item.match(remaining_line)
 
             if list_match:
+                processed_start = True
                 match_len = len(list_match.group(0))
                 yield Token(
                     type=TokenType.LIST_ITEM,
@@ -449,6 +447,7 @@ class Lexer:
                 return  # Processed indented list item
 
             elif ordered_list_match:
+                processed_start = True
                 marker, whitespace = ordered_list_match.groups()
                 match_len = len(ordered_list_match.group(0))
                 yield Token(

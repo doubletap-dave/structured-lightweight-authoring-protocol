@@ -42,8 +42,8 @@ def debug(
         from .style_utils import analyze_styles
         result = analyze_styles(content, style_type)
     elif mode == "ast":
-        from .parser_utils import analyze_ast
-        result = analyze_ast(content)
+        from .token_utils import visualize_ast
+        result = visualize_ast(content)
     else:
         raise ValueError(f"Unknown debug mode: {mode}")
 

@@ -3,7 +3,7 @@
 <p align="center"><strong>Structure Everything: A Modern Document Format for Humans and Machines</strong></p>
 
 <p align="center">
-  <em>Version 1.0.0 — 2025-04-14</em>
+  <em>Version 1.1.0 — unreleased</em>
 </p>
 
 ---
@@ -36,16 +36,16 @@ header: Project Status
   text: Now moving to Phase 4: CLI tools and conversion utilities.
 ```
 
-## 📋 Project Status
+## 📋 Project Status & Roadmap
 
 Nomenic Core has completed 3 of 6 planned phases:
 
 - **✅ Phase 1: Core Specification** - Format design, token schema, grammar rules
 - **✅ Phase 2: Parser Implementation** - Lexer, parser, AST, validation, error handling
 - **✅ Phase 3: Testing & Validation** - Unit tests, fuzz testing, benchmarks, edge cases
-- **🔄 Phase 4: CLI Tooling & Conversion** - Currently in progress
-- **⏱️ Phase 5: Documentation & Examples** - Upcoming
-- **⏱️ Phase 6: Refinement & Extensibility** - Upcoming
+- **✅ Phase 4: CLI Tooling & Conversion** - Complete
+- **✍️ Phase 5: Polishing & Docs** - In progress
+- **🚀 Phase 6: Refinement & Extensibility** - Upcoming
 
 ## 📚 Documentation
 
@@ -139,9 +139,17 @@ black src tests
 ruff src tests
 ```
 
-## 🤝 Contributing
+## 🤝 Contributing & Roadmap
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Next Steps
+
+- Expand unit tests for YAML and Markdown converters 📚
+- Add integration tests for CLI commands (convert, render, validate, debug, lint) 🧪
+- Set up CI workflow (GitHub Actions) for tests and benchmarks 🔄
+- Bump package version to 1.1.0 and draft release notes 📝
+- Update CHANGELOG.md with new release entries 📑
 
 ## 📄 License
 

@@ -233,13 +233,16 @@ def handle_debug(args: argparse.Namespace) -> int:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # Debug the content
-        result = debug(
-            content,
-            mode=args.mode,
-            format=args.format,
-            filter=args.filter
-        )
+        # Prepare debug parameters and map filters to the correct arguments
+        dbg_kwargs = {"mode": args.mode, "output_format": args.format}
+        if args.filter:
+            if args.mode == "tokens":
+                dbg_kwargs["token_type"] = args.filter
+            elif args.mode == "errors":
+                dbg_kwargs["error_category"] = args.filter
+            elif args.mode == "styles":
+                dbg_kwargs["style_type"] = args.filter
+        result = debug(content, **dbg_kwargs)
 
         print(result)
         return 0
@@ -298,10 +301,10 @@ def handle_validate(args: argparse.Namespace) -> int:
         else:
             # Text format
             if len(parser.errors) == 0 and len(validation_errors) == 0:
-                print(f"✅ Document is valid: {args.file}")
+                print(f" Document is valid: {args.file}")
                 return 0
             else:
-                print(f"❌ Document validation failed: {args.file}")
+                print(f" Document validation failed: {args.file}")
 
                 if parser.errors:
                     print(f"\nParser errors ({len(parser.errors)}):")
